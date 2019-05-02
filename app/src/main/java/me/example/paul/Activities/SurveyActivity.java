@@ -26,14 +26,11 @@ import me.example.paul.R;
 
 public class SurveyActivity extends AppCompatActivity {
 
-    private ViewPager pager;
-    private LinearLayout dotLayout;
     private Survey survey;
-
+    private ViewPager pager;
     ArrayList<Fragment> fragments;
-
+    private LinearLayout dotLayout;
     private TextView[] dots;
-
     private Button nextButton;
     private int currentPage;
 
@@ -42,15 +39,14 @@ public class SurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
 
-        dotLayout = (LinearLayout) findViewById(R.id.dots);
-
-
+        dotLayout = findViewById(R.id.dots);
         nextButton = findViewById(R.id.button_next);
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class);
         }
+
         fragments = new ArrayList<>();
 
         for (Question q : survey.getQuestions()) {
@@ -71,7 +67,7 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
-        pager = (ViewPager) findViewById(R.id.pager);
+        pager = findViewById(R.id.pager);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
 
@@ -81,10 +77,9 @@ public class SurveyActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPage == fragments.size()-1) {
+                if (currentPage == fragments.size() - 1) {
                     event_survey_completed(Answers.getInstance());
-                }
-                else go_to_next();
+                } else go_to_next();
             }
         });
     }
@@ -109,7 +104,6 @@ public class SurveyActivity extends AppCompatActivity {
             dots[i].setText(Html.fromHtml("&#8226"));
             dots[i].setTextSize(35);
             dots[i].setTextColor(getResources().getColor(R.color.colorTransparentWhite));
-
             dotLayout.addView(dots[i]);
         }
 
@@ -128,10 +122,7 @@ public class SurveyActivity extends AppCompatActivity {
             addDotsIndicator(i);
             currentPage = i;
 
-            if (i == 0) {
-                nextButton.setEnabled(true);
-                nextButton.setText("Next");
-            } else if (i == dots.length-1) {
+            if (i == dots.length - 1) {
                 nextButton.setEnabled(true);
                 nextButton.setText("Finish");
             } else {
