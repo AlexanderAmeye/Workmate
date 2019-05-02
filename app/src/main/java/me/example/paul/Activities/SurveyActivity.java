@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,7 +35,6 @@ public class SurveyActivity extends AppCompatActivity {
     private TextView[] dots;
 
     private Button nextButton;
-    private Button previousButton;
     private int currentPage;
 
     @Override
@@ -48,17 +46,12 @@ public class SurveyActivity extends AppCompatActivity {
 
 
         nextButton = findViewById(R.id.button_next);
-        previousButton = findViewById(R.id.button_previous);
 
         if (getIntent().getExtras() != null) {
-            Bundle bundle = getIntent().getExtras(); //bundle of data we pass between applications
-            survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class); //this takes the json and maps it onto the survey class,
-            // so it's important the the variable names in the survey class match the names in the json
+            Bundle bundle = getIntent().getExtras();
+            survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class);
         }
         fragments = new ArrayList<>();
-
-
-        Log.i("json Object = ", String.valueOf(survey.getQuestions()));
 
         for (Question q : survey.getQuestions()) {
             if (q.getQuestionType().equals("String")) {
@@ -78,16 +71,12 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
-        // EndFragment frag = new EndFragment();
-        // fragments.add(frag);
-
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
 
         addDotsIndicator(0);
         pager.addOnPageChangeListener(viewListener);
-
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,26 +87,10 @@ public class SurveyActivity extends AppCompatActivity {
                 else go_to_next();
             }
         });
-
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
     }
 
     public void go_to_next() {
         pager.setCurrentItem(pager.getCurrentItem() + 1);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (pager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            pager.setCurrentItem(pager.getCurrentItem() - 1);
-        }
     }
 
     public void event_survey_completed(Answers instance) {
@@ -148,7 +121,6 @@ public class SurveyActivity extends AppCompatActivity {
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
-
         }
 
         @Override
@@ -158,32 +130,18 @@ public class SurveyActivity extends AppCompatActivity {
 
             if (i == 0) {
                 nextButton.setEnabled(true);
-                previousButton.setEnabled(false);
-                previousButton.setVisibility(View.INVISIBLE);
-
                 nextButton.setText("Next");
-                previousButton.setText("");
             } else if (i == dots.length-1) {
                 nextButton.setEnabled(true);
-                previousButton.setEnabled(true);
-                previousButton.setVisibility(View.VISIBLE);
-
                 nextButton.setText("Finish");
-                previousButton.setText("Back");
             } else {
                 nextButton.setEnabled(true);
-                previousButton.setEnabled(true);
-                previousButton.setVisibility(View.VISIBLE);
-
                 nextButton.setText("Next");
-                previousButton.setText("Back");
             }
         }
 
-
         @Override
         public void onPageScrollStateChanged(int i) {
-
         }
     };
 }

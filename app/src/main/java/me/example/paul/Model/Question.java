@@ -11,9 +11,11 @@ public class Question implements Serializable {
     public String getQuestion_id() {
         return question_id;
     }
+
     public String getQuestionTitle() {
         return title;
     }
+
     public String getQuestionType() {
         return type;
     }

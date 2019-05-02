@@ -3,6 +3,7 @@ package me.example.paul.widgets;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 public class NoSwipeViewPager extends ViewPager {
 
@@ -14,7 +15,7 @@ public class NoSwipeViewPager extends ViewPager {
         super(context, attrs);
     }
 
-   /* @Override
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return false;
     }
@@ -22,5 +23,5 @@ public class NoSwipeViewPager extends ViewPager {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return false;
-    }*/
+    }
 }
