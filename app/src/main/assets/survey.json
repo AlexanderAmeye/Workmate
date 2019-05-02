@@ -1,0 +1,12 @@
+[
+    {
+        "id": "1",
+        "title": "What's your favorite color?",
+        "type": "String"
+    },
+    {
+        "id": "2",
+        "title": "What's your favorite animal?",
+        "type": "String"
+    }
+]

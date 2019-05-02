@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#0000BCD4</color>
+    <color name="colorAccent">#A9A9A9</color>
+
+    <color name="screen1">#4285F4</color>
+    <color name="screen2">#DB4437</color>
+    <color name="screen3">#F4B400</color>
+    <color name="screen4">#0F9D58</color>
+
+    <color name="dot_dark">#808080</color>
+    <color name="dot_light">#C0C0C0</color>
+
+    <color name="colorTransparentWhite">#CCCCCC</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+</resources>

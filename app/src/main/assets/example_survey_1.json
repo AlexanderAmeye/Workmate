@@ -1,0 +1,21 @@
+{
+  "questions": [
+    {
+      "type": "String",
+      "title": "Question A"
+    },
+    {
+      "type": "String",
+      "title": "Question B"
+    },
+    {
+      "type": "String",
+      "title": "Question C"
+    },
+    {
+      "type": "String",
+      "title": "Question D"
+    }
+  ]
+}
+
