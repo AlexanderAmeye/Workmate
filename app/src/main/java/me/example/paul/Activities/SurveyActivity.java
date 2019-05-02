@@ -8,6 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +18,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import me.example.paul.Answers;
-import me.example.paul.Fragments.EndFragment;
 import me.example.paul.Fragments.MultiSelectFragment;
 import me.example.paul.Fragments.TextFragment;
 import me.example.paul.Model.Question;
@@ -34,12 +35,20 @@ public class SurveyActivity extends AppCompatActivity {
 
     private TextView[] dots;
 
+    private Button nextButton;
+    private Button previousButton;
+    private int currentPage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
 
         dotLayout = (LinearLayout) findViewById(R.id.dots);
+
+
+        nextButton = findViewById(R.id.button_next);
+        previousButton = findViewById(R.id.button_previous);
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras(); //bundle of data we pass between applications
@@ -69,8 +78,8 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
-        EndFragment frag = new EndFragment();
-        fragments.add(frag);
+        // EndFragment frag = new EndFragment();
+        // fragments.add(frag);
 
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
@@ -78,6 +87,24 @@ public class SurveyActivity extends AppCompatActivity {
 
         addDotsIndicator(0);
         pager.addOnPageChangeListener(viewListener);
+
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPage == fragments.size()-1) {
+                    event_survey_completed(Answers.getInstance());
+                }
+                else go_to_next();
+            }
+        });
+
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     public void go_to_next() {
@@ -101,24 +128,20 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void addDotsIndicator(int position) {
-        if (position < fragments.size() - 1) {
-            dots = new TextView[fragments.size() - 1];
-            dotLayout.removeAllViews();
+        dots = new TextView[fragments.size()];
+        dotLayout.removeAllViews();
 
-            for (int i = 0; i < dots.length; i++) {
-                dots[i] = new TextView(this);
-                dots[i].setText(Html.fromHtml("&#8226"));
-                dots[i].setTextSize(35);
-                dots[i].setTextColor(getResources().getColor(R.color.colorTransparentWhite));
+        for (int i = 0; i < dots.length; i++) {
+            dots[i] = new TextView(this);
+            dots[i].setText(Html.fromHtml("&#8226"));
+            dots[i].setTextSize(35);
+            dots[i].setTextColor(getResources().getColor(R.color.colorTransparentWhite));
 
-                dotLayout.addView(dots[i]);
-            }
+            dotLayout.addView(dots[i]);
+        }
 
-            if (dots.length > 0) {
-                dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
-            }
-        } else {
-            dotLayout.removeAllViews();
+        if (dots.length > 0) {
+            dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
         }
     }
 
@@ -131,7 +154,32 @@ public class SurveyActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
             addDotsIndicator(i);
+            currentPage = i;
+
+            if (i == 0) {
+                nextButton.setEnabled(true);
+                previousButton.setEnabled(false);
+                previousButton.setVisibility(View.INVISIBLE);
+
+                nextButton.setText("Next");
+                previousButton.setText("");
+            } else if (i == dots.length-1) {
+                nextButton.setEnabled(true);
+                previousButton.setEnabled(true);
+                previousButton.setVisibility(View.VISIBLE);
+
+                nextButton.setText("Finish");
+                previousButton.setText("Back");
+            } else {
+                nextButton.setEnabled(true);
+                previousButton.setEnabled(true);
+                previousButton.setVisibility(View.VISIBLE);
+
+                nextButton.setText("Next");
+                previousButton.setText("Back");
+            }
         }
+
 
         @Override
         public void onPageScrollStateChanged(int i) {

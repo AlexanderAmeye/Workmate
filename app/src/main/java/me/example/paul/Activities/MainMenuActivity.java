@@ -85,10 +85,6 @@ public class MainMenuActivity extends AppCompatActivity {
                         }
                 );
                 requestQueue.add(jsonArrayRequest);
-
-                Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
-                intent.putExtra("json_survey", loadSurveyJson("example_survey_1.json"));
-                startActivityForResult(intent, SURVEY_REQUEST);
             }
         });
 

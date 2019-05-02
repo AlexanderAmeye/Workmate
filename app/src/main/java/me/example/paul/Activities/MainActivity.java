@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import me.example.paul.DeveloperSettings;
 import me.example.paul.R;
 import me.example.paul.SessionManager;
 
@@ -36,15 +35,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button developerSettingsButton = (Button) findViewById(R.id.developerSettingsButton);
-        developerSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DeveloperSettings.class);
                 startActivity(intent);
             }
         });

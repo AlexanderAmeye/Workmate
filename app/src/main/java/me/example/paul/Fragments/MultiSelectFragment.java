@@ -1,6 +1,5 @@
 package me.example.paul.Fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +7,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -28,16 +26,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.example.paul.Activities.SurveyActivity;
 import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
 public class MultiSelectFragment extends Fragment {
 
-    private Question q_data;
     private FragmentActivity mContext;
-    private Button button_continue;
     private TextView textview_q_title;
     private LinearLayout linearLayout_checkboxes;
     private final ArrayList<CheckBox> allCb = new ArrayList<>();
@@ -46,17 +41,10 @@ public class MultiSelectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_multiselect, container, false);
+                R.layout.fragment_checkbox, container, false);
 
-        button_continue = (Button) rootView.findViewById(R.id.button_continue);
-        textview_q_title = (TextView) rootView.findViewById(R.id.textview_q_title);
-        linearLayout_checkboxes = (LinearLayout) rootView.findViewById(R.id.linearLayout_checkboxes);
-        button_continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SurveyActivity) mContext).go_to_next();
-            }
-        });
+        textview_q_title = (TextView) rootView.findViewById(R.id.question_title);
+        linearLayout_checkboxes = (LinearLayout) rootView.findViewById(R.id.checkboxes);
 
         return rootView;
     }
@@ -84,11 +72,11 @@ public class MultiSelectFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mContext = getActivity();
-        q_data = (Question) getArguments().getSerializable("data");
 
+        Question q_data = (Question) getArguments().getSerializable("data");
         textview_q_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
-
+        String id = q_data.getQuestion_id();
         String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetAllOptionsForQuestion/";
 
 
@@ -96,7 +84,7 @@ public class MultiSelectFragment extends Fragment {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                getOptionsURL + "1", //TODO: right ID
+                getOptionsURL + id, //TODO: right ID
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -117,8 +105,8 @@ public class MultiSelectFragment extends Fragment {
                                 CheckBox cb = new CheckBox(mContext);
                                 cb.setText(choice);
                                 cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                int redColorValue = Color.BLACK;
-                                cb.setTextColor(redColorValue);
+
+                                cb.setTextColor(getResources().getColor(R.color.colorWhite));
 
                                 cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 linearLayout_checkboxes.addView(cb);

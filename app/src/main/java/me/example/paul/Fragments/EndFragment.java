@@ -27,7 +27,7 @@ public class EndFragment extends Fragment {
 
 
         Button button_finish = (Button) rootView.findViewById(R.id.button_finish);
-        textView_end = (TextView) rootView.findViewById(R.id.textView_end);
+        textView_end = (TextView) rootView.findViewById(R.id.question_title);
 
 
         button_finish.setOnClickListener(new View.OnClickListener() {
