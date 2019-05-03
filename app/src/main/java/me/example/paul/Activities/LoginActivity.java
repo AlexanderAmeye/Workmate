@@ -1,30 +1,25 @@
 package me.example.paul.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import me.example.paul.AESCrypt;
 import me.example.paul.R;
 import me.example.paul.SessionManager;
 
@@ -34,11 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
-    //Debugging
-    private String logcatTag = "Login Activity";
-
     //Volley
-    private String loginUrl;
+    private String loginUserURL = "https://studev.groept.be/api/a18_sd308/UserLogin/";
     private RequestQueue serverQueue;
 
     @Override
@@ -60,9 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Volley
         serverQueue = Volley.newRequestQueue(this);
-        loginUrl = "http://" + PreferenceManager.getDefaultSharedPreferences(this).getString("example_text", "") + "/connect/login.php";
     }
 
     @Override
@@ -80,43 +70,51 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.setMessage("Login in progress");
             progressDialog.show();
 
-            StringRequest request = new StringRequest(Request.Method.POST, loginUrl, new Response.Listener<String>() {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, loginUserURL + email, null, new Response.Listener<JSONArray>() {
                 @Override
-                public void onResponse(String response) { //response message from php file
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        String success = jsonObject.getString("success");
-                        Toast.makeText(LoginActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        if (success.equals("true")) {
-                            Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                            startActivity(intent);
-                            sessionManager.createSession(jsonObject.getJSONArray("login").getString(0), jsonObject.getJSONArray("login").getString(1));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "" + response, Toast.LENGTH_SHORT).show();
-                    }
-                    progressDialog.dismiss();
+                public void onResponse(JSONArray response) {
+                    JSONArray array = response;
+                    if (array.length() != 0) //email was found
+                    {
+                        JSONObject object = null;
+                        try {
+                            object = array.getJSONObject(0);
+                            String found_password = object.get("password").toString();
+                            String found_username = object.get("username").toString();
+                            String found_email = object.get("password").toString();
 
+                            if (AESCrypt.decrypt(found_password).equals(password)) //correct password
+                            {
+                                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                                sessionManager.createSession(found_username, found_email);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(LoginActivity.this, "Failed to get data from server", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            Toast.makeText(LoginActivity.this, "Failed to decrypt password", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Email not recognised", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(LoginActivity.this, "my error :" + error, Toast.LENGTH_SHORT).show();
-                    Log.i("My error", "" + error);
+                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                 }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("email", email);
-                    map.put("password", password);
-                    return map;
-                }
-            };
+            }
+            );
             serverQueue.add(request);
-
         }
     }
 }

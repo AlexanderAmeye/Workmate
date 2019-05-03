@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
-    private String registerUserUrl = "https://studev.groept.be/api/a18_sd308/RegisterUser/";
+    private String registerUserUrl = "https://studev.groept.be/api/a18_sd308/UserRegistration/";
     private String getUserUrl = "https://studev.groept.be/api/a18_sd308/GetUser/";
     private RequestQueue serverQueue;
 

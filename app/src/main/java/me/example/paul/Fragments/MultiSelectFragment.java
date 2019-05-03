@@ -102,7 +102,7 @@ public class MultiSelectFragment extends Fragment {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                getOptionsURL + id, //TODO: right ID
+                getOptionsURL + id,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
