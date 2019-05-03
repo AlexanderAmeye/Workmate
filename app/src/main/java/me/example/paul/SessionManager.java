@@ -46,16 +46,15 @@ public class SessionManager {
         }
     }
 
-    public HashMap<String, String> getUserDetails()
-    {
-        HashMap<String,String> user = new HashMap<>();
+    public HashMap<String, String> getUserDetails() {
+        HashMap<String, String> user = new HashMap<>();
         user.put(NAME, sharedPreferences.getString(NAME, null));
         user.put(EMAIL, sharedPreferences.getString(EMAIL, null));
 
         return user;
     }
-    public void logOut()
-    {
+
+    public void logOut() {
         editor.clear();
         editor.commit();
         Intent intent = new Intent(context, MainActivity.class);

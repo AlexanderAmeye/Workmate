@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
-    //Volley
     private String loginUserURL = "https://studev.groept.be/api/a18_sd308/UserLogin/";
     private RequestQueue serverQueue;
 
@@ -76,9 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                     JSONArray array = response;
                     if (array.length() != 0) //email was found
                     {
-                        JSONObject object = null;
                         try {
-                            object = array.getJSONObject(0);
+                            JSONObject object = array.getJSONObject(0);
                             String found_password = object.get("password").toString();
                             String found_username = object.get("username").toString();
                             String found_email = object.get("password").toString();
