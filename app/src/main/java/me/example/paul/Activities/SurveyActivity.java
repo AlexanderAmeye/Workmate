@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +29,6 @@ public class SurveyActivity extends AppCompatActivity {
     ArrayList<Fragment> fragments;
     private LinearLayout dotLayout;
     private TextView[] dots;
-    private Button nextButton;
     private int currentPage;
 
     @Override
@@ -40,7 +37,6 @@ public class SurveyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_survey);
 
         dotLayout = findViewById(R.id.dots);
-        nextButton = findViewById(R.id.button_next);
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -73,19 +69,14 @@ public class SurveyActivity extends AppCompatActivity {
 
         addDotsIndicator(0);
         pager.addOnPageChangeListener(viewListener);
-
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentPage == fragments.size() - 1) {
-                    event_survey_completed(Answers.getInstance());
-                } else go_to_next();
-            }
-        });
     }
 
     public void go_to_next() {
-        pager.setCurrentItem(pager.getCurrentItem() + 1);
+        if (currentPage == fragments.size() - 1) {
+            event_survey_completed(Answers.getInstance());
+        } else {
+            pager.setCurrentItem(pager.getCurrentItem() + 1);
+        }
     }
 
     public void event_survey_completed(Answers instance) {
@@ -112,6 +103,10 @@ public class SurveyActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isLastQuestion() {
+        return currentPage == fragments.size()-1;
+    }
+
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
@@ -121,14 +116,6 @@ public class SurveyActivity extends AppCompatActivity {
         public void onPageSelected(int i) {
             addDotsIndicator(i);
             currentPage = i;
-
-            if (i == dots.length - 1) {
-                nextButton.setEnabled(true);
-                nextButton.setText("Finish");
-            } else {
-                nextButton.setEnabled(true);
-                nextButton.setText("Next");
-            }
         }
 
         @Override

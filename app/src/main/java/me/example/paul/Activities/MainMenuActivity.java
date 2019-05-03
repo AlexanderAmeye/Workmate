@@ -3,6 +3,7 @@ package me.example.paul.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -90,6 +91,9 @@ public class MainMenuActivity extends AppCompatActivity {
         if (requestCode == SURVEY_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String answers_json = data.getExtras().getString("answers");
+                Log.d("****", "****************** WE HAVE ANSWERS ******************");
+                Log.v("ANSWERS JSON", answers_json);
+                Log.d("****", "*****************************************************");
                 StartActivity(MainMenuActivity.class);
             }
         }

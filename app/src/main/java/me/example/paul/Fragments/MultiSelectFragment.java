@@ -2,11 +2,11 @@ package me.example.paul.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -26,16 +26,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.example.paul.Activities.SurveyActivity;
 import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
 public class MultiSelectFragment extends Fragment {
 
-    private FragmentActivity mContext;
-    private TextView textview_q_title;
-    private LinearLayout linearLayout_checkboxes;
-    private final ArrayList<CheckBox> allCb = new ArrayList<>();
+    private TextView question_title;
+    private LinearLayout checkboxLayout;
+    private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
+    private Button next_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,27 +44,47 @@ public class MultiSelectFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_checkbox, container, false);
 
-        textview_q_title = (TextView) rootView.findViewById(R.id.question_title);
-        linearLayout_checkboxes = (LinearLayout) rootView.findViewById(R.id.checkboxes);
 
+        question_title = (TextView) rootView.findViewById(R.id.question_title);
+        checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
+
+        next_button = rootView.findViewById(R.id.button_next);
+        next_button.setVisibility(View.INVISIBLE);
+
+        next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SurveyActivity) getActivity()).go_to_next();
+            }
+        });
         return rootView;
     }
 
     private void collect_data() {
-
-        //----- collection & validation for is_required
-        String the_choices = "";
-        boolean at_leaset_one_checked = false;
-        for (CheckBox cb : allCb) {
+        StringBuilder the_choices = new StringBuilder();
+        boolean at_least_one_checked = false;
+        for (CheckBox cb : checkboxes) {
             if (cb.isChecked()) {
-                at_leaset_one_checked = true;
-                the_choices = the_choices + cb.getText().toString() + ", ";
+                at_least_one_checked = true;
+                the_choices.append(cb.getText().toString()).append(", ");
             }
         }
 
         if (the_choices.length() > 2) {
-            the_choices = the_choices.substring(0, the_choices.length() - 2);
-            Answers.getInstance().put_answer(textview_q_title.getText().toString(), the_choices);
+            the_choices = new StringBuilder(the_choices.substring(0, the_choices.length() - 2));
+            Answers.getInstance().put_answer(question_title.getText().toString(), the_choices.toString());
+        }
+
+        if(at_least_one_checked)
+        {
+            if(((SurveyActivity) getActivity()).isLastQuestion())
+            {
+                next_button.setText("Finish");
+            }
+            next_button.setVisibility(View.VISIBLE);
+        }
+        else{
+            next_button.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -71,16 +92,13 @@ public class MultiSelectFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mContext = getActivity();
-
         Question q_data = (Question) getArguments().getSerializable("data");
-        textview_q_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
+        question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
         String id = q_data.getQuestion_id();
         String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetAllOptionsForQuestion/";
 
-
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -102,15 +120,13 @@ public class MultiSelectFragment extends Fragment {
                             }
 
                             for (String choice : options) {
-                                CheckBox cb = new CheckBox(mContext);
+                                CheckBox cb = new CheckBox(getActivity());
                                 cb.setText(choice);
                                 cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
                                 cb.setTextColor(getResources().getColor(R.color.colorWhite));
-
                                 cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                linearLayout_checkboxes.addView(cb);
-                                allCb.add(cb);
+                                checkboxLayout.addView(cb);
+                                checkboxes.add(cb);
 
                                 cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override

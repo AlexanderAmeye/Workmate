@@ -9,9 +9,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import me.example.paul.Activities.SurveyActivity;
+import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
@@ -19,6 +22,7 @@ public class TextFragment extends Fragment {
     private FragmentActivity context;
     private TextView question_title;
     private EditText answer;
+    private Button next_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +33,16 @@ public class TextFragment extends Fragment {
         question_title = rootView.findViewById(R.id.question_title);
         answer = rootView.findViewById(R.id.answer_text);
 
+        next_button = rootView.findViewById(R.id.button_next);
+        next_button.setVisibility(View.INVISIBLE);
+
+        next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Answers.getInstance().put_answer(question_title.getText().toString(), answer.getText().toString().trim());
+                ((SurveyActivity) getActivity()).go_to_next();
+            }
+        });
         return rootView;
     }
 
@@ -36,12 +50,12 @@ public class TextFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        context = getActivity();
         Question q_data = (Question) getArguments().getSerializable("data");
 
         answer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
@@ -50,17 +64,19 @@ public class TextFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 3) {
-                  //  continue_button.setVisibility(View.VISIBLE);
+                if (s.length() > 0) {
+                    if(((SurveyActivity) getActivity()).isLastQuestion())
+                    {
+                        next_button.setText("Finish");
+                    }
+                    next_button.setVisibility(View.VISIBLE);
                 } else {
-                  //  continue_button.setVisibility(View.GONE);
+                    next_button.setVisibility(View.INVISIBLE);
                 }
             }
         });
 
         question_title.setText(Html.fromHtml(q_data.getQuestionTitle()));
         answer.requestFocus();
-       // InputMethodManager imm = (InputMethodManager) context.getSystemService(Service.INPUT_METHOD_SERVICE);
-       // imm.showSoftInput(answer, 0);
     }
 }

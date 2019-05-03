@@ -12,7 +12,7 @@
     <color name="dot_dark">#808080</color>
     <color name="dot_light">#C0C0C0</color>
 
-    <color name="colorTransparentWhite">#CCCCCC</color>
+    <color name="colorTransparentWhite">#6FB3B3B3</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>
