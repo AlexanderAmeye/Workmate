@@ -94,6 +94,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 Log.d("****", "****************** WE HAVE ANSWERS ******************");
                 Log.v("ANSWERS JSON", answers_json);
                 Log.d("****", "*****************************************************");
+
+                //TODO: parse this JSON and add them as votes
                 StartActivity(MainMenuActivity.class);
             }
         }
