@@ -15,7 +15,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import me.example.paul.Answers;
-import me.example.paul.Fragments.MultiSelectFragment;
+import me.example.paul.Fragments.Multiselect;
+import me.example.paul.Fragments.Select;
 import me.example.paul.Fragments.TextFragment;
 import me.example.paul.Model.Question;
 import me.example.paul.Model.Survey;
@@ -54,8 +55,16 @@ public class SurveyActivity extends AppCompatActivity {
                 fragments.add(frag);
             }
 
-            if (q.getQuestionType().equals("MultiSelect")) {
-                MultiSelectFragment frag = new MultiSelectFragment();
+            if (q.getQuestionType().equals("Multiselect")) {
+                Multiselect frag = new Multiselect();
+                Bundle xBundle = new Bundle();
+                xBundle.putSerializable("data", q);
+                frag.setArguments(xBundle);
+                fragments.add(frag);
+            }
+
+            if (q.getQuestionType().equals("Select")) {
+                Select frag = new Select();
                 Bundle xBundle = new Bundle();
                 xBundle.putSerializable("data", q);
                 frag.setArguments(xBundle);

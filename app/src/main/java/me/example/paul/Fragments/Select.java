@@ -7,9 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -31,22 +32,23 @@ import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
-public class MultiSelectFragment extends Fragment {
+public class Select extends Fragment {
 
     private TextView question_title;
-    private LinearLayout checkboxLayout;
-    private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
+    private RadioGroup radioGroup;
+    private final ArrayList<RadioButton> radioButtons = new ArrayList<>();
     private Button next_button;
+    private boolean at_least_one_checked = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_checkbox, container, false);
+                R.layout.select, container, false);
 
 
         question_title = (TextView) rootView.findViewById(R.id.question_title);
-        checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
+        radioGroup = (RadioGroup) rootView.findViewById(R.id.radiogroup);
 
         next_button = rootView.findViewById(R.id.button_next);
         next_button.setVisibility(View.INVISIBLE);
@@ -61,18 +63,18 @@ public class MultiSelectFragment extends Fragment {
     }
 
     private void collect_data() {
-        StringBuilder the_choices = new StringBuilder();
-        boolean at_least_one_checked = false;
-        for (CheckBox cb : checkboxes) {
-            if (cb.isChecked()) {
+        String selection = "";
+        at_least_one_checked = false;
+
+        for (RadioButton rb : radioButtons) {
+            if (rb.isChecked()) {
                 at_least_one_checked = true;
-                the_choices.append(cb.getText().toString()).append(", ");
+                selection = rb.getText().toString();
             }
         }
 
-        if (the_choices.length() > 2) {
-            the_choices = new StringBuilder(the_choices.substring(0, the_choices.length() - 2));
-            Answers.getInstance().put_answer(question_title.getText().toString(), the_choices.toString());
+        if (selection.length() > 0) {
+            Answers.getInstance().put_answer(question_title.getText().toString(), selection);
         }
 
         if(at_least_one_checked)
@@ -120,15 +122,15 @@ public class MultiSelectFragment extends Fragment {
                             }
 
                             for (String choice : options) {
-                                CheckBox cb = new CheckBox(getActivity());
-                                cb.setText(choice);
-                                cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                cb.setTextColor(getResources().getColor(R.color.colorWhite));
-                                cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                checkboxLayout.addView(cb);
-                                checkboxes.add(cb);
+                                RadioButton rb = new RadioButton(getActivity());
+                                rb.setText(choice);
+                                rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                                rb.setTextColor(getResources().getColor(R.color.colorWhite));
+                                rb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                radioGroup.addView(rb);
+                                radioButtons.add(rb);
 
-                                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                         collect_data();
