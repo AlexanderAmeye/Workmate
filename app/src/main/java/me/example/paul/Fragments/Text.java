@@ -14,16 +14,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import me.example.paul.Activities.SurveyActivity;
-import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
-public class TextFragment extends Fragment {
+public class Text extends Fragment {
     private FragmentActivity context;
     private TextView question_title;
     private EditText answer;
     private Button next_button;
-
+    private Button skip_button;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,12 +33,21 @@ public class TextFragment extends Fragment {
         answer = rootView.findViewById(R.id.answer_text);
 
         next_button = rootView.findViewById(R.id.button_next);
+        skip_button = rootView.findViewById(R.id.button_skip);
+
         next_button.setVisibility(View.INVISIBLE);
+        skip_button.setVisibility(View.VISIBLE);
+
+        skip_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SurveyActivity) getActivity()).go_to_next();
+            }
+        });
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Answers.getInstance().put_answer(question_title.getText().toString(), answer.getText().toString().trim());
                 ((SurveyActivity) getActivity()).go_to_next();
             }
         });

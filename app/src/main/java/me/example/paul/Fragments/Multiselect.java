@@ -37,6 +37,7 @@ public class Multiselect extends Fragment {
     private LinearLayout checkboxLayout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
     private Button next_button;
+    private Button skip_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +50,17 @@ public class Multiselect extends Fragment {
         checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
 
         next_button = rootView.findViewById(R.id.button_next);
+        skip_button = rootView.findViewById(R.id.button_skip);
+
         next_button.setVisibility(View.INVISIBLE);
+        skip_button.setVisibility(View.VISIBLE);
+
+        skip_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SurveyActivity) getActivity()).go_to_next();
+            }
+        });
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override

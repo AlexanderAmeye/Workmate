@@ -38,6 +38,7 @@ public class Select extends Fragment {
     private RadioGroup radioGroup;
     private final ArrayList<RadioButton> radioButtons = new ArrayList<>();
     private Button next_button;
+    private Button skip_button;
     private boolean at_least_one_checked = false;
 
     @Override
@@ -51,9 +52,19 @@ public class Select extends Fragment {
         radioGroup = (RadioGroup) rootView.findViewById(R.id.radiogroup);
 
         next_button = rootView.findViewById(R.id.button_next);
+        skip_button = rootView.findViewById(R.id.button_skip);
+
         next_button.setVisibility(View.INVISIBLE);
+        skip_button.setVisibility(View.VISIBLE);
 
         next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SurveyActivity) getActivity()).go_to_next();
+            }
+        });
+
+        skip_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((SurveyActivity) getActivity()).go_to_next();

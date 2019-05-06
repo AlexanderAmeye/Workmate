@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import me.example.paul.Answers;
 import me.example.paul.Fragments.Multiselect;
 import me.example.paul.Fragments.Select;
-import me.example.paul.Fragments.TextFragment;
+import me.example.paul.Fragments.Text;
 import me.example.paul.Model.Question;
 import me.example.paul.Model.Survey;
 import me.example.paul.PagerAdapter;
@@ -48,7 +48,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         for (Question q : survey.getQuestions()) {
             if (q.getQuestionType().equals("String")) {
-                TextFragment frag = new TextFragment();
+                Text frag = new Text();
                 Bundle xBundle = new Bundle();
                 xBundle.putSerializable("data", q);
                 frag.setArguments(xBundle);
