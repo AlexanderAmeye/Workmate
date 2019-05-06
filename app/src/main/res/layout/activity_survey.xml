@@ -21,9 +21,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="191dp"
-        android:layout_marginRight="191dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="164dp"
+        android:layout_marginRight="164dp"
+        android:layout_marginBottom="53dp"
         android:gravity="center"
         android:orientation="horizontal"></LinearLayout>
 

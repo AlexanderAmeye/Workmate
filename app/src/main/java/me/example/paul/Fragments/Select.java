@@ -44,7 +44,7 @@ public class Select extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.select, container, false);
+                R.layout.fragment_select, container, false);
 
 
         question_title = (TextView) rootView.findViewById(R.id.question_title);
@@ -98,7 +98,7 @@ public class Select extends Fragment {
         question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
         String id = q_data.getQuestion_id();
-        String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetAllOptionsForQuestion/";
+        String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetOptions/";
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 

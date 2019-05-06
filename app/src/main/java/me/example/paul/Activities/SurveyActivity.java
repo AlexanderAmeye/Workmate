@@ -109,6 +109,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         if (dots.length > 0) {
             dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
+            dots[position].setTextSize(40);
         }
     }
 

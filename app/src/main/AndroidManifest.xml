@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RewardsActivity"></activity>
-        <activity android:name=".Activities.MainMenuActivity" />
+        <activity android:name=".Activities.MenuActivity" />
         <activity
             android:name=".DeveloperSettings"
             android:label="@string/title_activity_developer_settings" />

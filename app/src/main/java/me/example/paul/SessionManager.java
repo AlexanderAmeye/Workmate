@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import java.util.HashMap;
 
 import me.example.paul.Activities.MainActivity;
-import me.example.paul.Activities.MainMenuActivity;
+import me.example.paul.Activities.MenuActivity;
 
 public class SessionManager {
 
@@ -41,7 +41,7 @@ public class SessionManager {
 
     public void checkLogin() {
         if (this.isLoggedin()) {
-            Intent intent = new Intent(context, MainMenuActivity.class);
+            Intent intent = new Intent(context, MenuActivity.class);
             context.startActivity(intent);
         }
     }
@@ -50,7 +50,6 @@ public class SessionManager {
         HashMap<String, String> user = new HashMap<>();
         user.put(NAME, sharedPreferences.getString(NAME, null));
         user.put(EMAIL, sharedPreferences.getString(EMAIL, null));
-
         return user;
     }
 

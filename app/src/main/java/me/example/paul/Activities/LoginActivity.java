@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
-    private String loginUserURL = "https://studev.groept.be/api/a18_sd308/UserLogin/";
+    private String getUserURL = "https://studev.groept.be/api/a18_sd308/GetUser/";
     private RequestQueue serverQueue;
 
     @Override
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.setMessage("Login in progress");
             progressDialog.show();
 
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, loginUserURL + email, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getUserURL + email, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     JSONArray array = response;
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject object = array.getJSONObject(0);
                             String found_password = object.get("password").toString();
                             String found_username = object.get("username").toString();
-                            String found_email = object.get("password").toString();
+                            String found_email = object.get("email").toString();
 
                             if (AESCrypt.decrypt(found_password).equals(password)) //correct password
                             {

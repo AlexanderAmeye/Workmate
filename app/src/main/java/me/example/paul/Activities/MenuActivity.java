@@ -21,13 +21,13 @@ import org.json.JSONObject;
 import me.example.paul.R;
 import me.example.paul.SessionManager;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     public static final int SURVEY_REQUEST = 1337;
 
     SessionManager sessionManager;
 
-    private String getAllQuestionsURL = "https://studev.groept.be/api/a18_sd308/GetAllQuestions";
+    private String getUnansweredQuestionsURL = "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,11 @@ public class MainMenuActivity extends AppCompatActivity {
         questionActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                         Request.Method.GET,
-                        getAllQuestionsURL,
+                        getUnansweredQuestionsURL + sessionManager.getUserDetails().get("EMAIL"),
                         null,
                         new Response.Listener<JSONArray>() {
                             @Override
@@ -96,7 +97,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Log.d("****", "*****************************************************");
 
                 //TODO: parse this JSON and add them as votes
-                StartActivity(MainMenuActivity.class);
+                StartActivity(MenuActivity.class);
             }
         }
     }
