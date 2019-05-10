@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import me.example.paul.Activities.SurveyActivity;
+import me.example.paul.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
@@ -48,6 +49,9 @@ public class Text extends Fragment {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String id = ((SurveyActivity)getActivity()).getQuestionId();
+                //  String email = ((MainActivity)getActivity()).getLoggedinUser();
+                Answers.getInstance().addAnswer(answer.getText().toString()," ",id);
                 ((SurveyActivity) getActivity()).go_to_next();
             }
         });

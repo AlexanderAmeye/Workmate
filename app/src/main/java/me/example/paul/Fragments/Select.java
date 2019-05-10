@@ -1,6 +1,8 @@
 package me.example.paul.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -58,9 +60,11 @@ public class Select extends Fragment {
         skip_button.setVisibility(View.VISIBLE);
 
         next_button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                ((SurveyActivity) getActivity()).go_to_next();
+               ((SurveyActivity) getActivity()).go_to_next();
+
             }
         });
 
@@ -85,7 +89,9 @@ public class Select extends Fragment {
         }
 
         if (selection.length() > 0) {
-            Answers.getInstance().put_answer(question_title.getText().toString(), selection);
+            String id = ((SurveyActivity)getActivity()).getQuestionId();
+          //  String email = ((MainActivity)getActivity()).getLoggedinUser();
+            Answers.getInstance().addAnswer(selection," ",id);
         }
 
         if(at_least_one_checked)

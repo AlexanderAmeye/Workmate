@@ -40,5 +40,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public String getLoggedinUser()
+    {
+        return sessionManager.getUserDetails().get("EMAIL");
+    }
+
 
 }

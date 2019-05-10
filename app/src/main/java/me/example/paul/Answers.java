@@ -1,26 +1,32 @@
 package me.example.paul;
-import com.google.gson.Gson;
-import java.util.LinkedHashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Answers {
     private volatile static Answers uniqueInstance;
-    private final LinkedHashMap<String, String> answered_hashmap = new LinkedHashMap<>();
+
+    private JSONArray answers;
 
     private Answers() {
+        answers = new JSONArray();
     }
 
-    public void put_answer(String key, String value) {
-        answered_hashmap.put(key, value);
+    public void addAnswer(String text, String extraComment, String questionId) {
+        JSONObject answer = new JSONObject();
+        try {
+            answer.put("text", text);
+            answer.put("extra_comment", extraComment);
+            answer.put("question_id", questionId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        answers.put(answer);
     }
 
-    public String get_json_object() {
-        Gson gson = new Gson();
-        return gson.toJson(answered_hashmap,LinkedHashMap.class);
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(answered_hashmap);
+    public JSONArray getAnswers() {
+        return answers;
     }
 
     public static Answers getInstance() {

@@ -45,7 +45,6 @@ public class Multiselect extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_multiselect, container, false);
 
-
         question_title = (TextView) rootView.findViewById(R.id.question_title);
         checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
 
@@ -65,10 +64,25 @@ public class Multiselect extends Fragment {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String id = ((SurveyActivity) getActivity()).getQuestionId();
+
+                for (String choice : getSelections()) {
+                    Answers.getInstance().addAnswer(choice, " ", id);
+                }
                 ((SurveyActivity) getActivity()).go_to_next();
             }
         });
         return rootView;
+    }
+
+    private ArrayList<String> getSelections() {
+        ArrayList<String> selections = new ArrayList<>();
+        for (CheckBox cb : checkboxes) {
+            if (cb.isChecked()) {
+                selections.add(cb.getText().toString());
+            }
+        }
+        return selections;
     }
 
     private void collect_data() {
@@ -81,20 +95,12 @@ public class Multiselect extends Fragment {
             }
         }
 
-        if (the_choices.length() > 0) {
-            the_choices = new StringBuilder(the_choices.substring(0, the_choices.length() - 2));
-            Answers.getInstance().put_answer(question_title.getText().toString(), the_choices.toString());
-        }
-
-        if(at_least_one_checked)
-        {
-            if(((SurveyActivity) getActivity()).isLastQuestion())
-            {
+        if (at_least_one_checked) {
+            if (((SurveyActivity) getActivity()).isLastQuestion()) {
                 next_button.setText("Finish");
             }
             next_button.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             next_button.setVisibility(View.INVISIBLE);
         }
     }
