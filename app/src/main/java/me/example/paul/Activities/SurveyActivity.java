@@ -31,6 +31,7 @@ import java.util.Map;
 
 import me.example.paul.Answers;
 import me.example.paul.Fragments.Multiselect;
+import me.example.paul.Fragments.NoQuestions;
 import me.example.paul.Fragments.Select;
 import me.example.paul.Fragments.Text;
 import me.example.paul.Model.Question;
@@ -62,7 +63,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
-            survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class);
+            survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class); //this maps the json onto the survey class
         }
 
         fragments = new ArrayList<>();
@@ -93,13 +94,22 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
+        if(survey.getQuestions().size() == 0)
+        {
+            NoQuestions frag = new NoQuestions();
+            fragments.add(frag);
+        }
+
+        else
+        {
+            if(fragments.size() > 1) addDotsIndicator(0);
+        }
+
         pager = findViewById(R.id.pager);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
 
-        addDotsIndicator(0);
         pager.addOnPageChangeListener(viewListener);
-
         serverQueue = Volley.newRequestQueue(this);
     }
 
