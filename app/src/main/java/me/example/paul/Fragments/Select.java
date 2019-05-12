@@ -89,9 +89,9 @@ public class Select extends Fragment {
         }
 
         if (selection.length() > 0) {
-            String id = ((SurveyActivity)getActivity()).getQuestionId();
-          //  String email = ((MainActivity)getActivity()).getLoggedinUser();
-            Answers.getInstance().addAnswer(selection," ",id);
+            Question q_data = (Question) getArguments().getSerializable("data");
+            Answers.getInstance().addAnswer(selection," ",q_data.getQuestion_id(), q_data.getReward());
+            //  String email = ((MainActivity)getActivity()).getLoggedinUser();
         }
 
         if(at_least_one_checked)

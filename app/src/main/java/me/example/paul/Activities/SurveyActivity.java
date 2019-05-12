@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.example.paul.Answers;
+import me.example.paul.Fragments.SurveyEnd;
 import me.example.paul.Fragments.Multiselect;
 import me.example.paul.Fragments.NoQuestions;
 import me.example.paul.Fragments.Select;
@@ -49,7 +51,11 @@ public class SurveyActivity extends AppCompatActivity {
     private TextView[] dots;
     private int currentPage;
 
+    private int totalEarnedCredits;
+
     private String addVoteUrl = "https://studev.groept.be/api/a18_sd308/Addvote/";
+    private String getBalanceUrl = "https://studev.groept.be/api/a18_sd308/GetBalance/";
+    private String updateBalanceUrl = "https://studev.groept.be/api/a18_sd308/UpdateBalance/";
     private RequestQueue serverQueue;
 
     @Override
@@ -94,15 +100,13 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
-        if(survey.getQuestions().size() == 0)
-        {
+        if (survey.getQuestions().size() == 0) {
             NoQuestions frag = new NoQuestions();
             fragments.add(frag);
-        }
-
-        else
-        {
-            if(fragments.size() > 1) addDotsIndicator(0);
+        } else {
+            SurveyEnd frag = new SurveyEnd();
+            fragments.add(frag);
+            if (fragments.size() > 2) addDotsIndicator(0);
         }
 
         pager = findViewById(R.id.pager);
@@ -121,10 +125,6 @@ public class SurveyActivity extends AppCompatActivity {
         }
     }
 
-    public String getQuestionId() {
-        return survey.getQuestion(pager.getCurrentItem()).getQuestion_id();
-    }
-
     public void event_survey_completed(Answers instance) {
         JSONArray answers = instance.getAnswers();
 
@@ -134,16 +134,59 @@ public class SurveyActivity extends AppCompatActivity {
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
                 String comment = answer.getString("extra_comment");
+                //String email = ((MainActivity)getActivity()).getLoggedinUser();
                 String email = "alexanderameye@gmail.com";
+                totalEarnedCredits += answer.getInt("reward");
                 addVote(id, email, text, comment);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
+        calculateTotalCredits(totalEarnedCredits);
+
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+    }
+
+    public void calculateTotalCredits(final int newCredits) {
+        if (newCredits > 0) {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + "alexanderameye@gmail.com", null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        JSONObject obj = response.getJSONObject(0);
+                        int currentbalance = obj.getInt("balance");
+                        updateBalance(currentbalance + newCredits);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            serverQueue.add(request);
+        }
+    }
+
+    public void updateBalance(int credits) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, updateBalanceUrl + credits + "/" + "alexanderameye@gmail.com", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        serverQueue.add(request);
     }
 
     public void addVote(final String id, final String email, final String text, final String comment) {
@@ -155,8 +198,8 @@ public class SurveyActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Log.e("VOLLEY", error.toString());
+                error.printStackTrace();
+                Log.e("VOLLEY", error.toString());
                 Toast.makeText(SurveyActivity.this, "Voting failed", Toast.LENGTH_LONG).show();
             }
         }) {
@@ -166,7 +209,7 @@ public class SurveyActivity extends AppCompatActivity {
                 map.put("questions_question_id", id);
                 map.put("users_email", email);
                 map.put("text", text);
-                map.put("extra_comment",comment);
+                map.put("extra_comment", comment);
                 return map;
             }
         };
@@ -174,7 +217,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void addDotsIndicator(int position) {
-        dots = new TextView[fragments.size()];
+        dots = new TextView[fragments.size() - 1];
         dotLayout.removeAllViews();
 
         for (int i = 0; i < dots.length; i++) {
@@ -185,14 +228,14 @@ public class SurveyActivity extends AppCompatActivity {
             dotLayout.addView(dots[i]);
         }
 
-        if (dots.length > 0) {
+        if (dots.length > 0 && position < dots.length) {
             dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
             dots[position].setTextSize(40);
         }
     }
 
     public boolean isLastQuestion() {
-        return currentPage == fragments.size() - 1;
+        return currentPage == fragments.size() - 2;
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {

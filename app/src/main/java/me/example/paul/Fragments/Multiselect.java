@@ -64,10 +64,11 @@ public class Multiselect extends Fragment {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = ((SurveyActivity) getActivity()).getQuestionId();
+
+                Question q_data = (Question) getArguments().getSerializable("data");
 
                 for (String choice : getSelections()) {
-                    Answers.getInstance().addAnswer(choice, " ", id);
+                    Answers.getInstance().addAnswer(choice, " ", q_data.getQuestion_id(), q_data.getReward());
                 }
                 ((SurveyActivity) getActivity()).go_to_next();
             }

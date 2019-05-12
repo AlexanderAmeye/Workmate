@@ -49,9 +49,8 @@ public class Text extends Fragment {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = ((SurveyActivity)getActivity()).getQuestionId();
-                //  String email = ((MainActivity)getActivity()).getLoggedinUser();
-                Answers.getInstance().addAnswer(answer.getText().toString()," ",id);
+                Question q_data = (Question) getArguments().getSerializable("data");
+                Answers.getInstance().addAnswer(answer.getText().toString()," ",q_data.getQuestion_id(), q_data.getReward());
                 ((SurveyActivity) getActivity()).go_to_next();
             }
         });
