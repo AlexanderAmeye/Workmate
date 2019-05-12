@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,10 +33,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.example.paul.Answers;
-import me.example.paul.Fragments.SurveyEnd;
 import me.example.paul.Fragments.Multiselect;
 import me.example.paul.Fragments.NoQuestions;
 import me.example.paul.Fragments.Select;
+import me.example.paul.Fragments.SurveyEnd;
 import me.example.paul.Fragments.Text;
 import me.example.paul.Model.Question;
 import me.example.paul.Model.Survey;
@@ -62,6 +64,10 @@ public class SurveyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
+
+        Answers.getInstance().clear();
+
+        totalEarnedCredits = 0;
 
         progressDialog = new ProgressDialog(this);
 
@@ -145,6 +151,14 @@ public class SurveyActivity extends AppCompatActivity {
 
         calculateTotalCredits(totalEarnedCredits);
 
+        Toast toast = Toast.makeText(getApplicationContext(), "You gained " + totalEarnedCredits + " coins!", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 200);
+        LinearLayout toastContentView = (LinearLayout) toast.getView();
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setImageResource(R.drawable.icons8_swiss_franc_48);
+        toastContentView.addView(imageView, 0);
+        toast.show();
+
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
@@ -193,7 +207,6 @@ public class SurveyActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, addVoteUrl + id + "/" + email + "/" + text + "/" + comment, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(SurveyActivity.this, "Voting successful", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override

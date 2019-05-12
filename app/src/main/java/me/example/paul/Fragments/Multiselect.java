@@ -68,7 +68,7 @@ public class Multiselect extends Fragment {
                 Question q_data = (Question) getArguments().getSerializable("data");
 
                 for (String choice : getSelections()) {
-                    Answers.getInstance().addAnswer(choice, " ", q_data.getQuestion_id(), q_data.getReward());
+                    Answers.getInstance().addAnswer(choice, " ", q_data.getQuestion_id(), q_data.getReward()/getSelections().size());
                 }
                 ((SurveyActivity) getActivity()).go_to_next();
             }

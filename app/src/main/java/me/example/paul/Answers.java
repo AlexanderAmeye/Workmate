@@ -40,4 +40,9 @@ public class Answers {
         }
         return uniqueInstance;
     }
+
+    public void clear()
+    {
+        answers = new JSONArray();
+    }
 }
