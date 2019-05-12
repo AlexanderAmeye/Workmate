@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.example.paul.Activities.SurveyActivity;
-import me.example.paul.Answers;
+import me.example.paul.Model.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 

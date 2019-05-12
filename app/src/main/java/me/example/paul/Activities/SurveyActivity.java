@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.example.paul.Answers;
 import me.example.paul.Fragments.Multiselect;
 import me.example.paul.Fragments.NoQuestions;
 import me.example.paul.Fragments.Select;
 import me.example.paul.Fragments.SurveyEnd;
 import me.example.paul.Fragments.Text;
+import me.example.paul.Model.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.Model.Survey;
 import me.example.paul.PagerAdapter;

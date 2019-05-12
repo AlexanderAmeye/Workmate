@@ -1,4 +1,4 @@
-package me.example.paul;
+package me.example.paul.Model;
 
 import org.json.JSONArray;
 import org.json.JSONException;

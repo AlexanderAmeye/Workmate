@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import me.example.paul.Activities.SurveyActivity;
-import me.example.paul.Answers;
+import me.example.paul.Model.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
