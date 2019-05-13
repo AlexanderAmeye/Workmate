@@ -151,13 +151,16 @@ public class SurveyActivity extends AppCompatActivity {
 
         calculateTotalCredits(totalEarnedCredits);
 
-        Toast toast = Toast.makeText(getApplicationContext(), "You gained " + totalEarnedCredits + " coins!", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 200);
-        LinearLayout toastContentView = (LinearLayout) toast.getView();
-        ImageView imageView = new ImageView(getApplicationContext());
-        imageView.setImageResource(R.drawable.icons8_swiss_franc_48);
-        toastContentView.addView(imageView, 0);
-        toast.show();
+        if(totalEarnedCredits > 0)
+        {
+            Toast toast = Toast.makeText(getApplicationContext(), "You gained " + totalEarnedCredits + " coins!", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 200);
+            LinearLayout toastContentView = (LinearLayout) toast.getView();
+            ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setImageResource(R.drawable.icons8_swiss_franc_48);
+            toastContentView.addView(imageView, 0);
+            toast.show();
+        }
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
