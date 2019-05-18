@@ -133,6 +133,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void event_survey_completed(Answers instance) {
         JSONArray answers = instance.getAnswers();
+        String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
 
         for (int i = 0; i < answers.length(); i++) {
             try {
@@ -140,8 +141,6 @@ public class SurveyActivity extends AppCompatActivity {
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
                 String comment = answer.getString("extra_comment");
-                //String email = ((MainActivity)getActivity()).getLoggedinUser();
-                String email = "alexanderameye@gmail.com";
                 totalEarnedCredits += answer.getInt("reward");
                 addVote(id, email, text, comment);
             } catch (JSONException e) {
@@ -169,7 +168,8 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void calculateTotalCredits(final int newCredits) {
         if (newCredits > 0) {
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + "alexanderameye@gmail.com", null, new Response.Listener<JSONArray>() {
+            String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + email, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     try {
@@ -192,7 +192,8 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void updateBalance(int credits) {
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, updateBalanceUrl + credits + "/" + "alexanderameye@gmail.com", null, new Response.Listener<JSONArray>() {
+        String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, updateBalanceUrl + credits + "/" + email, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 

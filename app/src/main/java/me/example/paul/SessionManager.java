@@ -16,10 +16,10 @@ public class SessionManager {
     public Context context;
     int PRIVATE_MODE = 0;
 
-    private static final String PREF_NAME = "LOGIN";
+    private static final String PREF_NAME = "LOGIN_SESSION";
     public static final String NAME = "NAME";
     public static final String EMAIL = "EMAIL";
-    public static final String LOGIN = "IS_LOGIN";
+    public static final String LOGIN = "LOGGED_IN";
 
     public SessionManager(Context context) {
         this.context = context;
