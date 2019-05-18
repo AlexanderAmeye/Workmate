@@ -20,26 +20,27 @@
             android:padding="24dp">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/reward_title"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Card title" />
+                android:text="Title" />
 
             <TextView
+                android:id="@+id/reward_description"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/lorem_ipsum" />
+                android:text="Description" />
 
             <Button
-                style="@style/ButtonStyle"
                 android:id="@+id/button"
+                style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Button" />
+                android:text="GET" />
         </LinearLayout>
 
         <ImageView

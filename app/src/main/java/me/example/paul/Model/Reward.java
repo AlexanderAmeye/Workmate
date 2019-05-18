@@ -1,40 +1,31 @@
 package me.example.paul.Model;
 
-public class Reward {
-    private final String name;
-    private final String description;
-    private final int imageResource;
-    private boolean isFavorite = false;
+import java.io.Serializable;
 
+public class Reward implements Serializable {
+    private String reward_id;
+    private String title;
+    private String price;
+    private String description;
+    private String category;
 
-    public Reward(String name, String description, int imageResource) {
-        this.name = name;
-        this.description = description;
-        this.imageResource = imageResource;
-      //  this.imageUrl = imageUrl;
+    public String getReward_id() {
+        return reward_id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPrice() {
+        return price;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public int getImageResource() {
-        return imageResource;
+    public String getCategory() {
+        return category;
     }
-
-    public boolean getIsFavorite() {
-        return isFavorite;
-    }
-    public void setIsFavorite(boolean isFavorite) {
-        this.isFavorite = isFavorite;
-    }
-
-    public void toggleFavorite() {
-        isFavorite = !isFavorite;
-    }
-
 }

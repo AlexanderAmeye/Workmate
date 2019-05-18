@@ -7,23 +7,17 @@ import android.support.v7.widget.CardView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import me.example.paul.Fragments.CardFragment;
+import me.example.paul.Fragments.Card;
 
 public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implements CardAdapter {
 
-    private List<CardFragment> fragments;
+    private final ArrayList<Card> fragments;
     private float baseElevation;
 
-    public CardFragmentPagerAdapter(FragmentManager fm, float baseElevation) {
+    public CardFragmentPagerAdapter(FragmentManager fm, ArrayList<Card> fragments) {
         super(fm);
-        fragments = new ArrayList<>();
-        this.baseElevation = baseElevation;
-
-        for(int i = 0; i< 8; i++){
-            addCardFragment(new CardFragment());
-        }
+        this.fragments = fragments;
     }
 
     @Override
@@ -38,22 +32,22 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
 
     @Override
     public int getCount() {
-        return fragments.size();
+        return this.fragments.size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return CardFragment.getInstance(position);
+        return this.fragments.get(position);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Object fragment = super.instantiateItem(container, position);
-        fragments.set(position, (CardFragment) fragment);
+        fragments.set(position, (Card) fragment);
         return fragment;
     }
 
-    public void addCardFragment(CardFragment fragment) {
+    public void addCardFragment(Card fragment) {
         fragments.add(fragment);
     }
 

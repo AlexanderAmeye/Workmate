@@ -27,6 +27,7 @@ public class MenuActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     private String getUnansweredQuestionsURL = "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/";
+    private String getRewardsURL = "https://studev.groept.be/api/a18_sd308/GetAllRewards";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,34 @@ public class MenuActivity extends AppCompatActivity {
         rewardsActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartActivity(RewardsActivity.class);
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                        Request.Method.GET,
+                        getRewardsURL,
+                        null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                Intent intent = new Intent(getApplicationContext(), RewardsActivity.class);
+                                JSONArray array = response;
+                                JSONObject rewards = new JSONObject();
+                                try {
+                                    rewards.put("rewards", array);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.putExtra("json_rewards", rewards.toString());
+                                startActivity(intent);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonArrayRequest);
             }
         });
 

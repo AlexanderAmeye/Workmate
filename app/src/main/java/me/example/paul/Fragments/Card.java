@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,36 +14,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import me.example.paul.CardAdapter;
+import me.example.paul.Model.Reward;
 import me.example.paul.R;
 
 
-public class CardFragment extends Fragment {
-
+public class Card extends Fragment {
     private CardView cardView;
-
-    public static Fragment getInstance(int position) {
-        CardFragment f = new CardFragment();
-        Bundle args = new Bundle();
-        args.putInt("position", position);
-        f.setArguments(args);
-
-        return f;
-    }
+    private TextView reward_title;
+    private TextView reward_description;
 
     @SuppressLint("DefaultLocale")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_viewpager, container, false);
+        View view = inflater.inflate(R.layout.fragment_card, container, false);
+
+        reward_title = view.findViewById(R.id.reward_title);
+        reward_description = view.findViewById(R.id.reward_description);
 
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
-        TextView title = (TextView) view.findViewById(R.id.title);
-        Button button = (Button)view.findViewById(R.id.button);
+        Button button = (Button) view.findViewById(R.id.button);
 
-        title.setText(String.format("Card %d", getArguments().getInt("position")));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,5 +51,15 @@ public class CardFragment extends Fragment {
 
     public CardView getCardView() {
         return cardView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Reward r_data = (Reward) getArguments().getSerializable("data");
+
+        reward_title.setText(Html.fromHtml(r_data.getTitle()));
+        reward_description.setText(Html.fromHtml(r_data.getDescription()));
     }
 }

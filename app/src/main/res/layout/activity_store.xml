@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:fitsSystemWindows="true">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:id="@+id/card_active"
+        android:layout_width="335dp"
+        android:layout_height="329dp"
         android:layout_gravity="top|center"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:src="@drawable/card_connected" />
 
+    <ImageView
+        android:id="@+id/card_inactive"
+        android:layout_width="335dp"
+        android:layout_height="329dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:src="@drawable/card_disconnected" />
+
     <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="330dp"
         android:layout_gravity="bottom"
+        android:background="@color/colorWhite"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="30dp"
-        android:paddingEnd="@dimen/card_padding"
+        android:paddingStart="@dimen/card_padding"
         android:paddingLeft="@dimen/card_padding"
+        android:paddingEnd="@dimen/card_padding"
         android:paddingRight="@dimen/card_padding"
-        android:paddingStart="@dimen/card_padding" />
+        android:paddingBottom="30dp" />
+
+    <Switch
+        android:id="@+id/nfc_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NFC"
+        app:layout_anchor="@+id/card_active"
+        app:layout_anchorGravity="start|top" />
 
 </android.support.design.widget.CoordinatorLayout>
