@@ -3,6 +3,8 @@ package me.example.paul.Activities;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -49,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordConfirmationFieldText = findViewById(R.id.passwordConfirmationRegisterText);
         progressDialog = new ProgressDialog(this);
 
-        Button registerButton = findViewById(R.id.registerButton);
+        final Button registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,13 +59,82 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         serverQueue = Volley.newRequestQueue(this);
+
+
+        emailFieldText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String email = emailFieldText.getText().toString().trim();
+                if (!isValidEmail(email)) {
+                    emailFieldText.setBackgroundResource(R.drawable.input_box_incorrect);
+                } else {
+                    emailFieldText.setBackgroundResource(R.drawable.input_box_correct);
+                }
+            }
+        });
+
+        passwordFieldText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String password = passwordFieldText.getText().toString().trim();
+
+                if (password.length() < 6) {
+                    passwordFieldText.setBackgroundResource(R.drawable.input_box_incorrect);
+                } else {
+                    passwordFieldText.setBackgroundResource(R.drawable.input_box_correct);
+                }
+            }
+        });
+
+        passwordConfirmationFieldText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String password = passwordFieldText.getText().toString().trim();
+                String passwordConfirmation = passwordConfirmationFieldText.getText().toString().trim();
+
+                if (!password.equals(passwordConfirmation)) {
+                    passwordConfirmationFieldText.setBackgroundResource(R.drawable.input_box_incorrect);
+                } else {
+                    passwordConfirmationFieldText.setBackgroundResource(R.drawable.input_box_correct);
+                }
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
     }
-
 
     public void RegisterUser() {
         final String username = usernameFieldText.getText().toString().trim();
@@ -74,19 +145,20 @@ public class RegisterActivity extends AppCompatActivity {
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
             Toast.makeText(RegisterActivity.this, "Some fields were left empty", Toast.LENGTH_SHORT).show();
         } else if (!password.equals(passwordConfirmation)) {
-            passwordConfirmationFieldText.setError("Passwords do not match");
+            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             passwordConfirmationFieldText.requestFocus();
         } else if (password.length() < 6) {
-            passwordFieldText.setError("Must be at least 6 characters");
+            Toast.makeText(RegisterActivity.this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
             passwordFieldText.requestFocus();
+
         } else if (!isValidEmail(email)) {
-            Toast.makeText(RegisterActivity.this, "Email is not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
         } else {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getUserUrl + email, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     if (response.length() > 0) {
-                        Toast.makeText(RegisterActivity.this, "Account wih email already exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Account with email already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         try {
                             Register(username, password, email);

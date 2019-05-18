@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -17,6 +18,7 @@ import me.example.paul.Fragments.Card;
 import me.example.paul.Model.Reward;
 import me.example.paul.Model.Store;
 import me.example.paul.R;
+import me.example.paul.SessionManager;
 import me.example.paul.ShadowTransformer;
 
 public class RewardsActivity extends AppCompatActivity {
@@ -24,6 +26,11 @@ public class RewardsActivity extends AppCompatActivity {
     private ImageView activeCard;
     private ImageView inactiveCard;
     private Switch nfc_connected;
+
+
+    SessionManager sessionManager;
+
+    private TextView employeeName;
 
     private Store store;
     private ViewPager pager;
@@ -34,11 +41,16 @@ public class RewardsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
+        sessionManager = new SessionManager(this);
+
         nfc_connected = findViewById(R.id.nfc_switch);
         inactiveCard = findViewById(R.id.card_inactive);
         activeCard = findViewById(R.id.card_active);
         inactiveCard.setVisibility(View.VISIBLE);
         activeCard.setVisibility(View.INVISIBLE);
+
+        employeeName = findViewById(R.id.employee_name);
+        employeeName.setText(sessionManager.getUserDetails().get("NAME"));
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();

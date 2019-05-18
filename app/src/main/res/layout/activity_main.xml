@@ -12,7 +12,7 @@
         android:layout_width="275dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/login_button_group"
+        android:background="@drawable/login_button"
         app:layout_constraintBottom_toTopOf="@+id/registerActivityButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.544"
