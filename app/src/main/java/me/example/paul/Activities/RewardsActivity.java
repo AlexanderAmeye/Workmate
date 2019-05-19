@@ -5,9 +5,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -23,14 +34,22 @@ public class RewardsActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
+    private String getBalanceUrl = "https://studev.groept.be/api/a18_sd308/GetBalance/";
+
+    private RequestQueue serverQueue;
+
     private Store store;
     private ViewPager pager;
     ArrayList<Card> fragments;
+
+    private TextView balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
+
+        serverQueue = Volley.newRequestQueue(this);
 
         sessionManager = new SessionManager(this);
 
@@ -40,6 +59,9 @@ public class RewardsActivity extends AppCompatActivity {
         }
 
         fragments = new ArrayList<>();
+
+        balance = findViewById(R.id.total_balance);
+        setUserBalance();
 
         for (Reward r : store.getRewards()) {
 
@@ -86,6 +108,34 @@ public class RewardsActivity extends AppCompatActivity {
                 }
             }
         });*/
+
+
+    }
+
+    private void setUserBalance()
+    {
+        String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + email, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    JSONObject obj = response.getJSONObject(0);
+                   // int total_balance = obj.getInt("balance");
+                    String total_balance = obj.getString("balance");
+                    balance.setText(total_balance);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        serverQueue.add(request);
     }
 
 
