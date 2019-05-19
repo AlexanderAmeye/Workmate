@@ -22,6 +22,7 @@ public class Card extends Fragment {
     private TextView reward_title;
     private TextView reward_description;
     private ImageView reward_icon;
+    private TextView reward_price;
 
 
     @SuppressLint("DefaultLocale")
@@ -33,6 +34,7 @@ public class Card extends Fragment {
         reward_title = view.findViewById(R.id.reward_title);
         reward_description = view.findViewById(R.id.reward_description);
         reward_icon = view.findViewById(R.id.reward_icon);
+        reward_price = view.findViewById(R.id.reward_price);
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
         return view;
@@ -49,5 +51,6 @@ public class Card extends Fragment {
         reward_title.setText(Html.fromHtml(r_data.getTitle()));
         reward_description.setText(Html.fromHtml(r_data.getDescription()));
         reward_icon.setImageResource(r_data.getIcon());
+        reward_price.setText(Html.fromHtml(r_data.getPrice()));
     }
 }
