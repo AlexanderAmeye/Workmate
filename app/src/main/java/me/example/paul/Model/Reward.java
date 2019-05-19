@@ -8,6 +8,7 @@ public class Reward implements Serializable {
     private String price;
     private String description;
     private String category;
+    private int icon;
 
     public String getReward_id() {
         return reward_id;
@@ -15,6 +16,14 @@ public class Reward implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 
     public String getPrice() {

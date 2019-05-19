@@ -3,11 +3,8 @@ package me.example.paul.Activities;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,14 +21,7 @@ import me.example.paul.ShadowTransformer;
 
 public class RewardsActivity extends AppCompatActivity {
 
-    private ImageView activeCard;
-    private ImageView inactiveCard;
-    private Switch nfc_connected;
-
-
     SessionManager sessionManager;
-
-    private Toolbar topToolBar;
 
     private Store store;
     private ViewPager pager;
@@ -44,23 +34,30 @@ public class RewardsActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
-       // nfc_connected = findViewById(R.id.nfc_switch);
-       // inactiveCard = findViewById(R.id.card_inactive);
-       // activeCard = findViewById(R.id.card_active);
-     //   inactiveCard.setVisibility(View.VISIBLE);
-      //  activeCard.setVisibility(View.INVISIBLE);
-
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             store = new Gson().fromJson(bundle.getString("json_rewards"), Store.class); //this maps the json onto the store class
         }
 
-     // topToolBar = findViewById(R.id.my_toolbar);
-       // setSupportActionBar(topToolBar);
-
         fragments = new ArrayList<>();
 
         for (Reward r : store.getRewards()) {
+
+            if(r.getCategory().equals("food"))
+            {
+                r.setIcon(R.drawable.food);
+            }
+
+            if(r.getCategory().equals("voucher"))
+            {
+                r.setIcon(R.drawable.voucher);
+            }
+
+            if(r.getCategory().equals("promotion"))
+            {
+                r.setIcon(R.drawable.promotion);
+            }
+
             Card card = new Card();
             Bundle xBundle = new Bundle();
             xBundle.putSerializable("data", r);
