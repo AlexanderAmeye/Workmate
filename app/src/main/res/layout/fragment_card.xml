@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
-    app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    app:cardBackgroundColor="#1919FF"
+    app:cardCornerRadius="9dp"
+    app:cardUseCompatPadding="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -34,22 +37,15 @@
                 android:layout_marginTop="24dp"
                 android:text="Description" />
 
-            <Button
-                android:id="@+id/button"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="GET" />
         </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
+            android:layout_marginTop="-5dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="-5dp"
             app:srcCompat="@drawable/ic_bookmark_24dp" />
 
     </FrameLayout>

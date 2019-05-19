@@ -25,7 +25,7 @@
         android:layout_marginTop="296dp"
         android:gravity="center"
         android:text="You have no unanswered questions!"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

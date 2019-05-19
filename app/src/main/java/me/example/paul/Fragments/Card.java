@@ -9,9 +9,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import me.example.paul.CardAdapter;
 import me.example.paul.Model.Reward;
@@ -36,15 +34,15 @@ public class Card extends Fragment {
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
-        Button button = (Button) view.findViewById(R.id.button);
+        //Button button = (Button) view.findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Button in Card " + getArguments().getInt("position")
                         + "Clicked!", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         return view;
     }

@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/alex_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RewardsActivity"></activity>
+        <activity android:name=".Activities.RewardsActivity"
+            android:parentActivityName=".Activities.MenuActivity"></activity>
         <activity android:name=".Activities.MenuActivity" />
         <activity
             android:name=".DeveloperSettings"

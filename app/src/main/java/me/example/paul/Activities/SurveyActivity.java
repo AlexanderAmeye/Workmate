@@ -246,8 +246,8 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         if (dots.length > 0 && position < dots.length) {
-            dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
-            dots[position].setTextSize(40);
+            dots[position].setTextColor(getResources().getColor(R.color.violet));
+            dots[position].setTextSize(35);
         }
     }
 

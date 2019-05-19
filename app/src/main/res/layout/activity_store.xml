@@ -4,10 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        style="@style/HeaderBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+
+        android:background="#1919FF"
+        android:elevation="4dp" />
+
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,60 +25,52 @@
             android:id="@+id/nfc_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="NFC"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@+id/card_active"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/card_inactive" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/card_inactive"
-            android:layout_width="335dp"
-            android:layout_height="329dp"
+            android:layout_width="300dp"
+            android:layout_height="267dp"
             android:layout_gravity="top|center"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="88dp"
             android:src="@drawable/card_disconnected"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/card_active"
-            android:layout_width="335dp"
-            android:layout_height="329dp"
+            android:layout_width="300dp"
+            android:layout_height="267dp"
             android:layout_gravity="top|center"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="88dp"
             android:src="@drawable/card_connected"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/employee_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/card_inactive"
-            app:layout_constraintEnd_toEndOf="@+id/card_inactive"
-            app:layout_constraintHorizontal_bias="0.115"
-            app:layout_constraintStart_toStartOf="@+id/card_inactive"
-            app:layout_constraintTop_toBottomOf="@+id/nfc_switch"
-            app:layout_constraintVertical_bias="0.583" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
+        android:layout_height="312dp"
         android:layout_gravity="bottom"
-        android:background="@color/colorWhite"
+        android:background="@color/white"
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingStart="@dimen/card_padding"
         android:paddingLeft="@dimen/card_padding"
         android:paddingEnd="@dimen/card_padding"
         android:paddingRight="@dimen/card_padding"
-        android:paddingBottom="30dp" />
+        android:paddingBottom="30dp">
+
+    </android.support.v4.view.ViewPager>
 
 </android.support.design.widget.CoordinatorLayout>

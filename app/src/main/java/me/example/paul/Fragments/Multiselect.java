@@ -146,7 +146,7 @@ public class Multiselect extends Fragment {
                                 CheckBox cb = new CheckBox(getActivity());
                                 cb.setText(choice);
                                 cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                cb.setTextColor(getResources().getColor(R.color.colorWhite));
+                                cb.setTextColor(getResources().getColor(R.color.white));
                                 cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 checkboxLayout.addView(cb);
                                 checkboxes.add(cb);

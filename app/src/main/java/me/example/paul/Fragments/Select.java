@@ -142,7 +142,7 @@ public class Select extends Fragment {
                                 RadioButton rb = new RadioButton(getActivity());
                                 rb.setText(choice);
                                 rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                rb.setTextColor(getResources().getColor(R.color.colorWhite));
+                                rb.setTextColor(getResources().getColor(R.color.white));
                                 rb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 radioGroup.addView(rb);
                                 radioButtons.add(rb);
