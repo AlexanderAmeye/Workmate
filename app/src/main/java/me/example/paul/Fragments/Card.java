@@ -26,25 +26,22 @@ public class Card extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_card, container, false);
+        View view = inflater.inflate(R.layout.fragment_reward, container, false);
 
         reward_title = view.findViewById(R.id.reward_title);
         reward_description = view.findViewById(R.id.reward_description);
 
+
+
         cardView = (CardView) view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
-        //Button button = (Button) view.findViewById(R.id.button);
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Button in Card " + getArguments().getInt("position")
-                        + "Clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         return view;
+    }
+
+    public void setBackgroundColor(int i)
+    {
+
     }
 
     public CardView getCardView() {
@@ -59,5 +56,6 @@ public class Card extends Fragment {
 
         reward_title.setText(Html.fromHtml(r_data.getTitle()));
         reward_description.setText(Html.fromHtml(r_data.getDescription()));
+
     }
 }

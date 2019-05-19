@@ -71,7 +71,7 @@ public class RewardsActivity extends AppCompatActivity {
         pager = findViewById(R.id.pager);
         CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(pager, pagerAdapter);
-        fragmentCardShadowTransformer.enableScaling(true);
+        fragmentCardShadowTransformer.enableScaling(false);
 
         pager.setAdapter(pagerAdapter);
         pager.setPageTransformer(false, fragmentCardShadowTransformer);

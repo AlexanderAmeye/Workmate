@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="#1919FF"
-    app:cardCornerRadius="9dp"
-    app:cardUseCompatPadding="true">
+    app:cardBackgroundColor="@color/cardview_dark_background"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+
+   >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,6 +39,16 @@
                 android:layout_marginTop="24dp"
                 android:text="Description" />
 
+            <Button
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:background="@color/screen2"
+                android:text="Purchase"
+                android:textColor="@color/white"
+                tools:text="Purchase" />
         </LinearLayout>
 
         <ImageView
