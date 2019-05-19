@@ -133,7 +133,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void event_survey_completed(Answers instance) {
         JSONArray answers = instance.getAnswers();
-        String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
 
         for (int i = 0; i < answers.length(); i++) {
             try {
@@ -150,8 +150,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         calculateTotalCredits(totalEarnedCredits);
 
-        if(totalEarnedCredits > 0)
-        {
+        if (totalEarnedCredits > 0) {
             Toast toast = Toast.makeText(getApplicationContext(), "You gained " + totalEarnedCredits + " coins!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 200);
             LinearLayout toastContentView = (LinearLayout) toast.getView();
@@ -168,7 +167,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void calculateTotalCredits(final int newCredits) {
         if (newCredits > 0) {
-            String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+            String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + email, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
@@ -192,7 +191,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void updateBalance(int credits) {
-        String email = this.getSharedPreferences("LOGIN_SESSION",0).getString("EMAIL", "");
+        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, updateBalanceUrl + credits + "/" + email, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

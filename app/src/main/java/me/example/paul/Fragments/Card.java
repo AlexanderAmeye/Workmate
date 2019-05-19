@@ -16,14 +16,12 @@ import me.example.paul.CardAdapter;
 import me.example.paul.Model.Reward;
 import me.example.paul.R;
 
-
 public class Card extends Fragment {
     private CardView cardView;
     private TextView reward_title;
     private TextView reward_description;
     private ImageView reward_icon;
     private TextView reward_price;
-
 
     @SuppressLint("DefaultLocale")
     @Nullable
@@ -35,13 +33,17 @@ public class Card extends Fragment {
         reward_description = view.findViewById(R.id.reward_description);
         reward_icon = view.findViewById(R.id.reward_icon);
         reward_price = view.findViewById(R.id.reward_price);
-        cardView = (CardView) view.findViewById(R.id.cardView);
+        cardView = view.findViewById(R.id.cardView);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
         return view;
     }
 
     public CardView getCardView() {
         return cardView;
+    }
+
+    public String getReward_price() {
+        return reward_price.getText().toString();
     }
 
     @Override

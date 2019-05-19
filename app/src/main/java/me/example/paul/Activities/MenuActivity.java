@@ -33,9 +33,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
         sessionManager = new SessionManager(this);
-
         Button rewardsActivityButton = findViewById(R.id.reward_button);
         rewardsActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +120,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
     }
+
 
     void StartActivity(Class c) {
         Intent intent = new Intent(getApplicationContext(), c);

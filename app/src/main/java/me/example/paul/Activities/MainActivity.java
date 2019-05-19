@@ -6,17 +6,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import me.example.paul.R;
 import me.example.paul.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
+
+    private String getBalanceUrl = "https://studev.groept.be/api/a18_sd308/GetBalance/";
+    private RequestQueue serverQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        serverQueue = Volley.newRequestQueue(this);
 
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
@@ -44,6 +53,4 @@ public class MainActivity extends AppCompatActivity {
     {
         return sessionManager.getUserDetails().get("EMAIL");
     }
-
-
 }
