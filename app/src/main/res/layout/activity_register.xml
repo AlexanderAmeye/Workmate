@@ -58,7 +58,7 @@
         app:layout_constraintVertical_bias="0.944" />
 
     <EditText
-        android:id="@+id/usernameFieldText"
+        android:id="@+id/usernameField"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -78,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <EditText
-        android:id="@+id/emailRegisterText"
+        android:id="@+id/emailField"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -98,10 +98,10 @@
         android:textCursorDrawable="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameFieldText" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameField" />
 
     <EditText
-        android:id="@+id/passwordRegisterText"
+        android:id="@+id/passwordField"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -121,10 +121,10 @@
         android:textCursorDrawable="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailRegisterText" />
+        app:layout_constraintTop_toBottomOf="@+id/emailField" />
 
     <EditText
-        android:id="@+id/passwordConfirmationRegisterText"
+        android:id="@+id/passwordConfirmationField"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -144,6 +144,6 @@
         android:textCursorDrawable="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordRegisterText" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
 
 </android.support.constraint.ConstraintLayout>
