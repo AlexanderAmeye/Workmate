@@ -1,10 +1,18 @@
 package me.example.paul.Activities;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,6 +25,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 import me.example.paul.AESCrypt;
 import me.example.paul.R;
 import me.example.paul.SessionManager;
@@ -25,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private RequestQueue serverQueue;
     SessionManager sessionManager;
+    NfcAdapter nfcAdapter;
 
     private EditText emailField, passwordField;
     private ProgressDialog progressDialog;
@@ -38,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         //System
         serverQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if(!nfcAvailable()) Toast.makeText(LoginActivity.this, "NFC disabled", Toast.LENGTH_SHORT).show();
 
         //UI
         emailField = findViewById(R.id.usernameField);
@@ -49,6 +62,69 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> Login());
         emailField.addTextChangedListener(emailFieldTextWatcher);
         passwordField.addTextChangedListener(passwordFieldTextWatcher);
+    }
+
+    public boolean nfcAvailable()
+    {
+        return (nfcAdapter!=null && nfcAdapter.isEnabled());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
+            Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (parcelables != null && parcelables.length > 0) {
+                readTextFromMessage((NdefMessage) parcelables[0]);
+            } else Toast.makeText(LoginActivity.this, "Blank Card!", Toast.LENGTH_SHORT).show();
+        }
+        super.onNewIntent(intent);
+    }
+
+    private void readTextFromMessage(NdefMessage ndefMessage) {
+        NdefRecord[] ndefRecords = ndefMessage.getRecords();
+        if (ndefRecords != null && ndefRecords.length > 0) {
+            NdefRecord ndefRecord1 = ndefRecords[0];
+            NdefRecord ndefRecord2 = ndefRecords[1];
+            emailField.setText(getTextFromNdefRecord(ndefRecord1));
+            passwordField.setText(getTextFromNdefRecord(ndefRecord2));
+        } else Toast.makeText(LoginActivity.this, "Blank Message!", Toast.LENGTH_SHORT).show();
+    }
+
+    public String getTextFromNdefRecord(NdefRecord ndefRecord) {
+        String tagContent = null;
+        try {
+            byte[] payload = ndefRecord.getPayload();
+            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+            int languageSize = payload[0] & 0063;
+            tagContent = new String(payload, languageSize + 1, payload.length - languageSize - 1, textEncoding);
+        } catch (UnsupportedEncodingException e) {
+            Log.e("getTextFromNdefRecord", e.getMessage(), e);
+        }
+        return tagContent;
+    }
+
+    @Override
+    protected void onResume() {
+        if(nfcAvailable()) enableForegroundDispatchSystem();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if(nfcAvailable()) disableForegroundDispatchSystem();
+        super.onPause();
+    }
+
+    private void enableForegroundDispatchSystem() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        IntentFilter[] intentFilters = new IntentFilter[]{};
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null);
+    }
+
+    private void disableForegroundDispatchSystem() {
+        nfcAdapter.disableForegroundDispatch(this);
     }
 
     TextWatcher emailFieldTextWatcher = new TextWatcher() {
