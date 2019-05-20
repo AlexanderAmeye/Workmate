@@ -79,14 +79,13 @@ public class LoginActivity extends AppCompatActivity {
             if (parcelables != null && parcelables.length > 0) {
                 readTextFromMessage((NdefMessage) parcelables[0]);
             } else Toast.makeText(LoginActivity.this, "Blank Card!", Toast.LENGTH_SHORT).show();
+
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            nfcAdapter.ignore(tag, 1000, () -> Toast.makeText(LoginActivity.this, "Card disconnected", Toast.LENGTH_SHORT).show(), new Handler(Looper.getMainLooper()));
         }
-
-        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-
-        nfcAdapter.ignore(tag, 1000, () -> Toast.makeText(LoginActivity.this, "Card disconnected", Toast.LENGTH_SHORT).show(), new Handler(Looper.getMainLooper()));
     }
 
-        private void readTextFromMessage(NdefMessage ndefMessage) {
+    private void readTextFromMessage(NdefMessage ndefMessage) {
         NdefRecord[] ndefRecords = ndefMessage.getRecords();
         if (ndefRecords != null && ndefRecords.length > 1) {
             NdefRecord ndefRecord1 = ndefRecords[0];
