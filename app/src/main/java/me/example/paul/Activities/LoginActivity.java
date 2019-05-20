@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
     private ProgressDialog progressDialog;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         emailField = findViewById(R.id.usernameField);
         passwordField = findViewById(R.id.emailField);
         progressDialog = new ProgressDialog(this);
+        loginButton = findViewById(R.id.registerButton);
 
-        Button loginButton = findViewById(R.id.registerButton);
+        //Listeners
         loginButton.setOnClickListener(v -> Login());
     }
 
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (AESCrypt.decrypt(found_password).equals(password)) //correct password
                         {
-                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             sessionManager.createSession(found_username, found_email);
                         } else {

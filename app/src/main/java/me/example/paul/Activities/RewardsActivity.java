@@ -85,6 +85,10 @@ public class RewardsActivity extends AppCompatActivity {
                 r.setIcon(R.drawable.promotion);
             }
 
+            if (r.getCategory().equals("")) {
+                r.setIcon(R.drawable.promotion);
+            }
+
             Card card = new Card();
             Bundle xBundle = new Bundle();
             xBundle.putSerializable("data", r);

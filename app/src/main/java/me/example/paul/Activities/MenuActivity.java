@@ -3,17 +3,16 @@ package me.example.paul.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,95 +21,95 @@ import me.example.paul.SessionManager;
 
 public class MenuActivity extends AppCompatActivity {
 
-    public static final int SURVEY_REQUEST = 1337;
-
+    private RequestQueue requestQueue;
     SessionManager sessionManager;
 
-    private String getUnansweredQuestionsURL = "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/";
-    private String getRewardsURL = "https://studev.groept.be/api/a18_sd308/GetAllRewards";
+    public static final int SURVEY_REQUEST = 8888;
+
+    private CardView questions_card, rewards_card;
+    private Button signoutButton;
+    private TextView welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        //System
+        requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
-        Button rewardsActivityButton = findViewById(R.id.reward_button);
-        rewardsActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                        Request.Method.GET,
-                        getRewardsURL,
-                        null,
-                        new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                Intent intent = new Intent(getApplicationContext(), RewardsActivity.class);
-                                JSONArray array = response;
-                                JSONObject rewards = new JSONObject();
-                                try {
-                                    rewards.put("rewards", array);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                intent.putExtra("json_rewards", rewards.toString());
-                                startActivity(intent);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        }
-                );
-                requestQueue.add(jsonArrayRequest);
-            }
-        });
+        //UI
+        questions_card = findViewById(R.id.questions_card);
+        rewards_card = findViewById(R.id.rewards_card);
+        signoutButton = findViewById(R.id.signout_button);
+        welcomeText = findViewById(R.id.welcome_text);
 
-        Button questionActivityButton = findViewById(R.id.questions_button);
-        questionActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //Listeners
+        questions_card.setOnClickListener(questionsButtonListener);
+        rewards_card.setOnClickListener(rewardsButtonListener);
+        signoutButton.setOnClickListener(logoutButtonListener);
 
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                        Request.Method.GET,
-                        getUnansweredQuestionsURL + sessionManager.getUserDetails().get("EMAIL"),
-                        null,
-                        new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
-                                JSONArray array = response;
-                                JSONObject questions = new JSONObject();
-                                try {
-                                    questions.put("questions", array);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                intent.putExtra("json_survey", questions.toString());
-                                startActivityForResult(intent, SURVEY_REQUEST);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        }
-                );
-                requestQueue.add(jsonArrayRequest);
-            }
-        });
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sessionManager.logOut();
-            }
-        });
+
+        welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
     }
+
+    View.OnClickListener questionsButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/" + sessionManager.getUserDetails().get("EMAIL"),
+                    null,
+                    response -> {
+                        Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
+                        JSONObject questions = new JSONObject();
+                        try {
+                            questions.put("questions", response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        intent.putExtra("json_survey", questions.toString());
+                        startActivityForResult(intent, SURVEY_REQUEST);
+                    },
+                    error -> {
+                    }
+            );
+            requestQueue.add(jsonArrayRequest);
+        }
+    };
+
+    View.OnClickListener rewardsButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    "https://studev.groept.be/api/a18_sd308/GetAllRewards",
+                    null,
+                    response -> {
+                        Intent intent = new Intent(getApplicationContext(), RewardsActivity.class);
+                        JSONObject rewards = new JSONObject();
+                        try {
+                            rewards.put("rewards", response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        intent.putExtra("json_rewards", rewards.toString());
+                        startActivity(intent);
+                    },
+                    error -> {
+                    }
+            );
+            requestQueue.add(jsonArrayRequest);
+        }
+    };
+
+    View.OnClickListener logoutButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            sessionManager.logOut();
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -120,7 +119,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
     }
-
 
     void StartActivity(Class c) {
         Intent intent = new Intent(getApplicationContext(), c);

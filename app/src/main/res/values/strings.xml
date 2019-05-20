@@ -76,6 +76,9 @@
         <item>3</item>
     </string-array>
 
+
+    <string name="welcome_message">Welcome %1$s,</string>
+
     <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>

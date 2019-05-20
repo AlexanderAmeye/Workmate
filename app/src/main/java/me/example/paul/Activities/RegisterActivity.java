@@ -25,11 +25,12 @@ import me.example.paul.SessionManager;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private RequestQueue serverQueue;
+    private RequestQueue requestQueue;
     SessionManager sessionManager;
 
     private EditText usernameField, emailField, passwordField, passwordConfirmationField;
     private ProgressDialog progressDialog;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //System
-        serverQueue = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
 
         //UI
@@ -46,10 +47,10 @@ public class RegisterActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.passwordField);
         passwordConfirmationField = findViewById(R.id.passwordConfirmationField);
         progressDialog = new ProgressDialog(this);
+        registerButton = findViewById(R.id.registerButton);
 
-        final Button registerButton = findViewById(R.id.registerButton);
+        //Listeners
         registerButton.setOnClickListener(v -> AttemptRegistration());
-
         emailField.addTextChangedListener(emailFieldTextWatcher);
         passwordField.addTextChangedListener(passwordFieldTextWatcher);
         passwordConfirmationField.addTextChangedListener(passwordConfirmationFieldTextWatcher);
@@ -148,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }, error -> {
             });
-            serverQueue.add(request);
+            requestQueue.add(request);
         }
     }
 
@@ -174,7 +175,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return map;
             }
         };
-        serverQueue.add(request);
+        requestQueue.add(request);
     }
 
     public static boolean incorrectEmail(String email) {
