@@ -22,7 +22,6 @@
         android:id="@+id/row2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:clipToPadding="false"
         android:gravity="center"
         android:orientation="horizontal"
@@ -35,8 +34,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/health_card"
-            android:layout_width="160dp"
-            android:layout_height="190dp"
+            android:layout_width="140dp"
+            android:layout_height="185dp"
             android:layout_margin="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -77,8 +76,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/performance_card"
-            android:layout_width="160dp"
-            android:layout_height="190dp"
+            android:layout_width="140dp"
+            android:layout_height="185dp"
             android:layout_margin="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -94,14 +93,14 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/performance"
                     android:padding="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="Performance"
                     android:textColor="#131313"
                     android:textStyle="bold" />
@@ -133,8 +132,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/questions_card"
-            android:layout_width="160dp"
-            android:layout_height="190dp"
+            android:layout_width="140dp"
+            android:layout_height="185dp"
             android:layout_margin="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -157,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="Surveys"
                     android:textColor="#131313"
                     android:textStyle="bold" />
@@ -175,8 +174,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/rewards_card"
-            android:layout_width="160dp"
-            android:layout_height="190dp"
+            android:layout_width="140dp"
+            android:layout_height="185dp"
             android:layout_margin="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -192,14 +191,14 @@
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/promotion"
-                    android:padding="10dp"
-                    android:layout_marginTop="20dp" />
+                    android:padding="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="Rewards"
                     android:textColor="#131313"
                     android:textStyle="bold" />
@@ -238,7 +237,7 @@
         android:layout_marginTop="4dp"
         android:text="We hope you're having a great day"
         android:textColor="#4A131313"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -7,7 +7,10 @@ import android.content.IntentFilter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -50,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         serverQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if(!nfcAvailable()) Toast.makeText(LoginActivity.this, "NFC disabled", Toast.LENGTH_SHORT).show();
+        if (!nfcAvailable())
+            Toast.makeText(LoginActivity.this, "NFC disabled", Toast.LENGTH_SHORT).show();
 
         //UI
         emailField = findViewById(R.id.usernameField);
@@ -64,9 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordField.addTextChangedListener(passwordFieldTextWatcher);
     }
 
-    public boolean nfcAvailable()
-    {
-        return (nfcAdapter!=null && nfcAdapter.isEnabled());
+    public boolean nfcAvailable() {
+        return (nfcAdapter != null && nfcAdapter.isEnabled());
     }
 
     @Override
@@ -77,17 +80,21 @@ public class LoginActivity extends AppCompatActivity {
                 readTextFromMessage((NdefMessage) parcelables[0]);
             } else Toast.makeText(LoginActivity.this, "Blank Card!", Toast.LENGTH_SHORT).show();
         }
-        super.onNewIntent(intent);
+
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+        nfcAdapter.ignore(tag, 1000, () -> Toast.makeText(LoginActivity.this, "Card disconnected", Toast.LENGTH_SHORT).show(), new Handler(Looper.getMainLooper()));
     }
 
-    private void readTextFromMessage(NdefMessage ndefMessage) {
+        private void readTextFromMessage(NdefMessage ndefMessage) {
         NdefRecord[] ndefRecords = ndefMessage.getRecords();
-        if (ndefRecords != null && ndefRecords.length > 0) {
+        if (ndefRecords != null && ndefRecords.length > 1) {
             NdefRecord ndefRecord1 = ndefRecords[0];
             NdefRecord ndefRecord2 = ndefRecords[1];
             emailField.setText(getTextFromNdefRecord(ndefRecord1));
             passwordField.setText(getTextFromNdefRecord(ndefRecord2));
-        } else Toast.makeText(LoginActivity.this, "Blank Message!", Toast.LENGTH_SHORT).show();
+            //Login();
+        } else Toast.makeText(LoginActivity.this, "Empty card", Toast.LENGTH_SHORT).show();
     }
 
     public String getTextFromNdefRecord(NdefRecord ndefRecord) {
@@ -105,13 +112,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(nfcAvailable()) enableForegroundDispatchSystem();
+        if (nfcAvailable()) enableForegroundDispatchSystem();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if(nfcAvailable()) disableForegroundDispatchSystem();
+        if (nfcAvailable()) disableForegroundDispatchSystem();
         super.onPause();
     }
 

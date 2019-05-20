@@ -17,12 +17,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="275dp">
 
             <ImageView
                 android:id="@+id/card_top"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="160dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
@@ -54,13 +54,13 @@
 
             <ImageView
                 android:id="@+id/reward_icon"
-                android:layout_width="159dp"
-                android:layout_height="146dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="118dp"
-                android:layout_marginBottom="37dp" />
+
+                android:layout_marginBottom="50dp" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/price"
