@@ -3,6 +3,8 @@ package me.example.paul.Activities;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -45,7 +47,39 @@ public class LoginActivity extends AppCompatActivity {
 
         //Listeners
         loginButton.setOnClickListener(v -> Login());
+        emailField.addTextChangedListener(emailFieldTextWatcher);
+        passwordField.addTextChangedListener(passwordFieldTextWatcher);
     }
+
+    TextWatcher emailFieldTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            emailField.setBackgroundResource(R.drawable.input_box_default);
+        }
+    };
+
+    TextWatcher passwordFieldTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            passwordField.setBackgroundResource(R.drawable.input_box_default);
+        }
+    };
 
     public void Login() {
         final String email = emailField.getText().toString().trim();
@@ -72,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                             sessionManager.createSession(found_username, found_email);
                         } else {
                             Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                            passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
                             progressDialog.dismiss();
                         }
                     } catch (JSONException e) {
@@ -80,11 +115,13 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     } catch (Exception e) {
                         Toast.makeText(LoginActivity.this, "Failed to decrypt password", Toast.LENGTH_SHORT).show();
+                        passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
                         progressDialog.dismiss();
                         e.printStackTrace();
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "Email not recognised", Toast.LENGTH_SHORT).show();
+                    emailField.setBackgroundResource(R.drawable.input_box_incorrect);
                     progressDialog.dismiss();
                 }
             }, error -> {

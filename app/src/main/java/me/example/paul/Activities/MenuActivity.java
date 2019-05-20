@@ -44,14 +44,12 @@ public class MenuActivity extends AppCompatActivity {
         rewards_card = findViewById(R.id.rewards_card);
         signoutButton = findViewById(R.id.signout_button);
         welcomeText = findViewById(R.id.welcome_text);
+        welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
 
         //Listeners
         questions_card.setOnClickListener(questionsButtonListener);
         rewards_card.setOnClickListener(rewardsButtonListener);
         signoutButton.setOnClickListener(logoutButtonListener);
-
-
-        welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
     }
 
     View.OnClickListener questionsButtonListener = new View.OnClickListener() {

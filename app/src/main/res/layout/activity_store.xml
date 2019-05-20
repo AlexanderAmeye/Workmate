@@ -69,6 +69,8 @@
         android:id="@+id/total_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="6dp"
         android:text="530"
         android:textAlignment="center"
         android:textColor="#131313"
@@ -79,12 +81,12 @@
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:srcCompat="@drawable/currency" />
+        app:srcCompat="@drawable/workcoin" />
 
 </android.support.constraint.ConstraintLayout>
