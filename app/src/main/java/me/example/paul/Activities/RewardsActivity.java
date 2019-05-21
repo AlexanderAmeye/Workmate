@@ -1,8 +1,6 @@
 package me.example.paul.Activities;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -36,6 +34,7 @@ import me.example.paul.Model.Store;
 import me.example.paul.R;
 import me.example.paul.SessionManager;
 import me.example.paul.ShadowTransformer;
+import me.example.paul.Utils.NFCHelper;
 
 public class RewardsActivity extends AppCompatActivity {
 
@@ -43,6 +42,7 @@ public class RewardsActivity extends AppCompatActivity {
     SessionManager sessionManager;
     NfcAdapter nfcAdapter;
 
+    private boolean nfcConnected = false;
 
     private ImageView cardActive, cardInactive;
 
@@ -128,17 +128,22 @@ public class RewardsActivity extends AppCompatActivity {
     View.OnClickListener purchaseButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int price = Integer.parseInt(pagerAdapter.getPrice(currentPage));
-            int userBalance = Integer.parseInt(balanceString);
-            if (userBalance >= price) {
-                int newBalance = userBalance - price;
-                balance.setText(Integer.toString(newBalance));
-                balanceString = Integer.toString(newBalance);
-                setUserBalance(newBalance);
-                Toast.makeText(RewardsActivity.this, "Reward Purchased!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(RewardsActivity.this, "Insufficient Funds!", Toast.LENGTH_SHORT).show();
+
+            if (nfcConnected) {
+                int price = Integer.parseInt(pagerAdapter.getPrice(currentPage));
+                int userBalance = Integer.parseInt(balanceString);
+                if (userBalance >= price) {
+                    int newBalance = userBalance - price;
+                    balance.setText(Integer.toString(newBalance));
+                    balanceString = Integer.toString(newBalance);
+                    setUserBalance(newBalance);
+                    Toast.makeText(RewardsActivity.this, "Reward Purchased!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(RewardsActivity.this, "Insufficient Funds!", Toast.LENGTH_SHORT).show();
+                }
             }
+
+            else Toast.makeText(RewardsActivity.this, "Card not found", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -192,7 +197,6 @@ public class RewardsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -212,37 +216,27 @@ public class RewardsActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
+            nfcConnected = true;
             cardActive.setVisibility(View.VISIBLE);
             cardInactive.setVisibility(View.INVISIBLE);
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             nfcAdapter.ignore(tag, 1000, () -> {
                 cardActive.setVisibility(View.INVISIBLE);
                 cardInactive.setVisibility(View.VISIBLE);
+                nfcConnected = false;
             }, new Handler(Looper.getMainLooper()));
         }
     }
 
     @Override
     protected void onResume() {
-        if (nfcAvailable()) enableForegroundDispatchSystem();
+        if (nfcAvailable()) NFCHelper.enableForegroundDispatchSystem(this, nfcAdapter, RewardsActivity.class);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if (nfcAvailable()) disableForegroundDispatchSystem();
+        if (nfcAvailable()) NFCHelper.disableForegroundDispatchSystem(this, nfcAdapter);
         super.onPause();
-    }
-
-    private void enableForegroundDispatchSystem() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        IntentFilter[] intentFilters = new IntentFilter[]{};
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null);
-    }
-
-    private void disableForegroundDispatchSystem() {
-        nfcAdapter.disableForegroundDispatch(this);
     }
 }
