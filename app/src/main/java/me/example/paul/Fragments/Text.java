@@ -50,7 +50,7 @@ public class Text extends Fragment {
             @Override
             public void onClick(View v) {
                 Question q_data = (Question) getArguments().getSerializable("data");
-                Answers.getInstance().addAnswer(answer.getText().toString()," ",q_data.getQuestion_id(), q_data.getReward());
+                Answers.getInstance().addAnswer(answer.getText().toString(),q_data.getQuestion_id(), q_data.getReward());
                 ((SurveyActivity) getActivity()).go_to_next();
             }
         });

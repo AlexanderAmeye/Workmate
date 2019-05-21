@@ -1,5 +1,6 @@
 package me.example.paul.Fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -90,7 +91,7 @@ public class Select extends Fragment {
 
         if (selection.length() > 0) {
             Question q_data = (Question) getArguments().getSerializable("data");
-            Answers.getInstance().addAnswer(selection," ",q_data.getQuestion_id(), q_data.getReward());
+            Answers.getInstance().addAnswer(selection,q_data.getQuestion_id(), q_data.getReward());
             //  String email = ((MainActivity)getActivity()).getLoggedinUser();
         }
 
@@ -142,7 +143,10 @@ public class Select extends Fragment {
                                 RadioButton rb = new RadioButton(getActivity());
                                 rb.setText(choice);
                                 rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                rb.setTextColor(getResources().getColor(R.color.white));
+                                rb.setTextColor(getResources().getColor(R.color.almost_black));
+
+                                rb.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.almost_black)));
+
                                 rb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 radioGroup.addView(rb);
                                 radioButtons.add(rb);

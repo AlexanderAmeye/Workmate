@@ -13,11 +13,10 @@ public class Answers {
         answers = new JSONArray();
     }
 
-    public void addAnswer(String text, String extraComment, String questionId, int reward) {
+    public void addAnswer(String text, String questionId, int reward) {
         JSONObject answer = new JSONObject();
         try {
             answer.put("text", text);
-            answer.put("extra_comment", extraComment);
             answer.put("question_id", questionId);
             answer.put("reward", reward);
         } catch (JSONException e) {

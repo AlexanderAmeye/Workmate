@@ -39,7 +39,6 @@ public class Multiselect extends Fragment {
     private Button next_button;
     private Button skip_button;
 
-    private TextView comment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class Multiselect extends Fragment {
 
         question_title = (TextView) rootView.findViewById(R.id.question_title);
         checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
-        comment = rootView.findViewById(R.id.extra_comment);
 
         next_button = rootView.findViewById(R.id.button_next);
         skip_button = rootView.findViewById(R.id.button_skip);
@@ -71,9 +69,9 @@ public class Multiselect extends Fragment {
                 for (String choice : getSelections()) {
                     if(getSelections().get(getSelections().size()-1).equals(choice))
                     {
-                        Answers.getInstance().addAnswer(choice, comment.getText().toString(), q_data.getQuestion_id(), q_data.getReward());
+                        Answers.getInstance().addAnswer(choice,  q_data.getQuestion_id(), q_data.getReward());
                     }
-                    else Answers.getInstance().addAnswer(choice, comment.getText().toString(), q_data.getQuestion_id(), 0);
+                    else Answers.getInstance().addAnswer(choice,  q_data.getQuestion_id(), 0);
                 }
                 ((SurveyActivity) getActivity()).go_to_next();
             }

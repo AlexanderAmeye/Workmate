@@ -12,8 +12,10 @@
     <color name="dot_dark">#808080</color>
     <color name="dot_light">#C0C0C0</color>
 
+    <color name="almost_black">#131313</color>
+
     <color name="colorTransparentWhite">#A1A0A0</color>
-    <color name="violet">#514ABE</color>
+    <color name="violet">#1919FF</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>
