@@ -26,10 +26,6 @@ public class MenuActivity extends AppCompatActivity {
 
     public static final int SURVEY_REQUEST = 8888;
 
-    private CardView questions_card, rewards_card;
-    private Button signoutButton;
-    private TextView welcomeText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +36,10 @@ public class MenuActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         //UI
-        questions_card = findViewById(R.id.questions_card);
-        rewards_card = findViewById(R.id.rewards_card);
-        signoutButton = findViewById(R.id.signout_button);
-        welcomeText = findViewById(R.id.welcome_text);
+        CardView questions_card = findViewById(R.id.questions_card);
+        CardView rewards_card = findViewById(R.id.rewards_card);
+        Button signoutButton = findViewById(R.id.signout_button);
+        TextView welcomeText = findViewById(R.id.welcome_text);
         welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
 
         //Listeners
