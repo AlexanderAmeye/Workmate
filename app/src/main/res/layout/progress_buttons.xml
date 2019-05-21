@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/question_title"
-        android:layout_width="154dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
@@ -36,6 +36,7 @@
         android:text="Next"
         android:textAllCaps="false"
         android:textColor="#131313"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,6 +49,7 @@
         android:text="Skip"
         android:textAllCaps="false"
         android:textColor="#131313"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

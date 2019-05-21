@@ -1,5 +1,6 @@
 package me.example.paul.Fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -144,7 +145,8 @@ public class Multiselect extends Fragment {
                                 CheckBox cb = new CheckBox(getActivity());
                                 cb.setText(choice);
                                 cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                cb.setTextColor(getResources().getColor(R.color.white));
+                                cb.setTextColor(getResources().getColor(R.color.almost_black));
+                                cb.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.almost_black)));
                                 cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 checkboxLayout.addView(cb);
                                 checkboxes.add(cb);
