@@ -38,7 +38,7 @@ import me.example.paul.Utils.NFCHelper;
 
 public class RewardsActivity extends AppCompatActivity {
 
-    private RequestQueue serverQueue;
+    private RequestQueue requestQueue;
     SessionManager sessionManager;
     NfcAdapter nfcAdapter;
 
@@ -63,7 +63,7 @@ public class RewardsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_store);
 
         //System
-        serverQueue = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (!nfcAvailable())
@@ -172,7 +172,7 @@ public class RewardsActivity extends AppCompatActivity {
         }, error -> {
 
         });
-        serverQueue.add(request);
+        requestQueue.add(request);
     }
 
     private void getUserBalance() {
@@ -191,7 +191,7 @@ public class RewardsActivity extends AppCompatActivity {
         }, error -> {
 
         });
-        serverQueue.add(request);
+        requestQueue.add(request);
     }
 
 

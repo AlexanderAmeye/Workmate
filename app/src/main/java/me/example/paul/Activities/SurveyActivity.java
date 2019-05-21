@@ -1,7 +1,6 @@
 package me.example.paul.Activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -45,7 +42,6 @@ import me.example.paul.R;
 
 public class SurveyActivity extends AppCompatActivity {
 
-    private ProgressDialog progressDialog;
     private Survey survey;
     private ViewPager pager;
     ArrayList<Fragment> fragments;
@@ -55,24 +51,23 @@ public class SurveyActivity extends AppCompatActivity {
 
     private int totalEarnedCredits;
 
-    private String addVoteUrl = "https://studev.groept.be/api/a18_sd308/Addvote/";
-    private String getBalanceUrl = "https://studev.groept.be/api/a18_sd308/GetBalance/";
-    private String updateBalanceUrl = "https://studev.groept.be/api/a18_sd308/UpdateBalance/";
-    private RequestQueue serverQueue;
+
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
 
-        Answers.getInstance().clear();
+        //System
+        requestQueue = Volley.newRequestQueue(this);
 
-        totalEarnedCredits = 0;
-
-        progressDialog = new ProgressDialog(this);
-
+        //UI
         dotLayout = findViewById(R.id.dots);
 
+        //Survey
+        Answers.getInstance().clear();
+        totalEarnedCredits = 0;
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class); //this maps the json onto the survey class
@@ -120,7 +115,6 @@ public class SurveyActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
 
         pager.addOnPageChangeListener(viewListener);
-        serverQueue = Volley.newRequestQueue(this);
     }
 
     public void go_to_next() {
@@ -140,9 +134,8 @@ public class SurveyActivity extends AppCompatActivity {
                 JSONObject answer = answers.getJSONObject(i);
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
-                String comment = answer.getString("extra_comment");
                 totalEarnedCredits += answer.getInt("reward");
-                addVote(id, email, text, comment);
+                addVote(id, email, text);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -168,56 +161,35 @@ public class SurveyActivity extends AppCompatActivity {
     public void calculateTotalCredits(final int newCredits) {
         if (newCredits > 0) {
             String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, getBalanceUrl + email, null, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    try {
-                        JSONObject obj = response.getJSONObject(0);
-                        int currentbalance = obj.getInt("balance");
-                        updateBalance(currentbalance + newCredits);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetBalance/" + email, null, response -> {
+                try {
+                    JSONObject obj = response.getJSONObject(0);
+                    int currentbalance = obj.getInt("balance");
+                    updateBalance(currentbalance + newCredits);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
 
-                }
+            }, error -> {
             });
-            serverQueue.add(request);
+            requestQueue.add(request);
         }
     }
 
     public void updateBalance(int credits) {
         String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, updateBalanceUrl + credits + "/" + email, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/UpdateBalance/" + credits + "/" + email, null, response -> {
+        }, error -> {
         });
-        serverQueue.add(request);
+        requestQueue.add(request);
     }
 
-    public void addVote(final String id, final String email, final String text, final String comment) {
-        StringRequest request = new StringRequest(Request.Method.POST, addVoteUrl + id + "/" + email + "/" + text + "/" + comment, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.e("VOLLEY", error.toString());
-                Toast.makeText(SurveyActivity.this, "Voting failed", Toast.LENGTH_LONG).show();
-            }
+    public void addVote(final String id, final String email, final String text) {
+        StringRequest request = new StringRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/Addvote/" + id + "/" + email + "/" + text, response -> {
+        }, error -> {
+            error.printStackTrace();
+            Log.e("VOLLEY", error.toString());
+            Toast.makeText(SurveyActivity.this, "Voting failed", Toast.LENGTH_LONG).show();
         }) {
             @Override
             protected Map<String, String> getParams() {
@@ -225,11 +197,10 @@ public class SurveyActivity extends AppCompatActivity {
                 map.put("questions_question_id", id);
                 map.put("users_email", email);
                 map.put("text", text);
-                map.put("extra_comment", comment);
                 return map;
             }
         };
-        serverQueue.add(request);
+        requestQueue.add(request);
     }
 
     public void addDotsIndicator(int position) {

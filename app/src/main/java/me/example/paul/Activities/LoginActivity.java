@@ -29,7 +29,7 @@ import me.example.paul.Utils.NFCHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private RequestQueue serverQueue;
+    private RequestQueue requestQueue;
     SessionManager sessionManager;
     NfcAdapter nfcAdapter;
 
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //System
-        serverQueue = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (!nfcAvailable())
@@ -145,9 +145,8 @@ public class LoginActivity extends AppCompatActivity {
                         String found_username = object.get("username").toString();
                         String found_email = object.get("email").toString();
 
-                        if (AESCrypt.decrypt(found_password).equals(password)) //correct password
+                        if (AESCrypt.decrypt(found_password).equals(password))
                         {
-                            //Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             sessionManager.createSession(found_username, found_email);
                         } else {
@@ -175,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
             );
-            serverQueue.add(request);
+            requestQueue.add(request);
         }
     }
 }

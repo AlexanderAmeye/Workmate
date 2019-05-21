@@ -30,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText usernameField, emailField, passwordField, passwordConfirmationField;
     private ProgressDialog progressDialog;
-    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.passwordField);
         passwordConfirmationField = findViewById(R.id.passwordConfirmationField);
         progressDialog = new ProgressDialog(this);
-        registerButton = findViewById(R.id.registerButton);
+        Button registerButton = findViewById(R.id.registerButton);
 
         //Listeners
         registerButton.setOnClickListener(v -> AttemptRegistration());
