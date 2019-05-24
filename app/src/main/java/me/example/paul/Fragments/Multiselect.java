@@ -60,18 +60,14 @@ public class Multiselect extends Fragment {
         next_button.setOnClickListener(v -> {
             Question q_data = (Question) getArguments().getSerializable("data");
 
+            int earnedCredits = 0;
             for (String choice : getSelections()) {
-                if(getSelections().get(getSelections().size()-1).equals(choice))
-                {
-                    Answers.getInstance().addAnswer(choice,q_data.getQuestion_id());
-                    ((SurveyActivity) getActivity()).go_to_next(q_data.getReward());
-                }
-                else
-                {
-                    Answers.getInstance().addAnswer(choice,q_data.getQuestion_id());
-                    ((SurveyActivity) getActivity()).go_to_next(0);
-                }
+                if (getSelections().get(getSelections().size() - 1).equals(choice)) {
+                    Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
+                    earnedCredits += q_data.getReward();
+                } else Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
             }
+            ((SurveyActivity) getActivity()).go_to_next(earnedCredits);
 
         });
         return rootView;

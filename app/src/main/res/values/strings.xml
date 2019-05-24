@@ -79,6 +79,7 @@
 
     <string name="welcome_message">Welcome %1$s,</string>
     <string name="unanswered_questions">Surveys (%1$s)</string>
+    <string name="earned_rewards">You earned %1$d credits!</string>
 
     <string-array name="multi_select_list_preference_default_value" />
 

@@ -8,8 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,16 +116,15 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void go_to_next(int earnedCredits) {
         if (currentPage == fragments.size() - 1) {
-            totalEarnedCredits+=earnedCredits;
+            totalEarnedCredits += earnedCredits;
             event_survey_completed(Answers.getInstance());
         } else {
-            totalEarnedCredits+=earnedCredits;
+            totalEarnedCredits += earnedCredits;
             pager.setCurrentItem(pager.getCurrentItem() + 1);
         }
     }
 
-    public int getTotalEarnedCredits()
-    {
+    public int getTotalEarnedCredits() {
         return totalEarnedCredits;
     }
 
@@ -140,7 +137,6 @@ public class SurveyActivity extends AppCompatActivity {
                 JSONObject answer = answers.getJSONObject(i);
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
-               // totalEarnedCredits += answer.getInt("reward");
                 addVote(id, email, text);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -148,16 +144,6 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         calculateTotalCredits(totalEarnedCredits);
-
-        if (totalEarnedCredits > 0) {
-            Toast toast = Toast.makeText(getApplicationContext(), "You gained " + totalEarnedCredits + " coins!", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 200);
-            LinearLayout toastContentView = (LinearLayout) toast.getView();
-            ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setImageResource(R.drawable.icons8_swiss_franc_48);
-            toastContentView.addView(imageView, 0);
-            toast.show();
-        }
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
