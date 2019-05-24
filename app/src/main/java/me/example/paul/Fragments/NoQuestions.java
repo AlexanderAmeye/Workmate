@@ -18,16 +18,14 @@ public class NoQuestions extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_noquestions, container, false);
 
+        //UI
         Button next_button = rootView.findViewById(R.id.button_next);
         next_button.setVisibility(View.VISIBLE);
-        next_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
+
+        //Listeners
+        next_button.setOnClickListener(nextButtonListener);
         return rootView;
     }
 
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
+    View.OnClickListener nextButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 }

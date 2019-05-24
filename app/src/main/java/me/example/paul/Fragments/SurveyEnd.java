@@ -13,8 +13,6 @@ import me.example.paul.R;
 
 public class SurveyEnd extends Fragment {
 
-
-    private int credits;
     private TextView earnedCredits;
 
     @Override
@@ -23,13 +21,17 @@ public class SurveyEnd extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_end_of_survey, container, false);
 
+        //UI
         earnedCredits = rootView.findViewById(R.id.earnedCredits);
-
         Button next_button = rootView.findViewById(R.id.button_next);
         next_button.setVisibility(View.VISIBLE);
-        next_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
+
+        //Listeners
+        next_button.setOnClickListener(nextButtonListener);
         return rootView;
     }
+
+    View.OnClickListener nextButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

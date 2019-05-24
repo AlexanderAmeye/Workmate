@@ -32,9 +32,9 @@ import me.example.paul.R;
 public class Select extends Fragment {
 
     private TextView question_title;
+    private Button next_button;
     private RadioGroup radioGroup;
     private final ArrayList<RadioButton> radioButtons = new ArrayList<>();
-    private Button next_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,28 +42,29 @@ public class Select extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_select, container, false);
 
+        //UI
         question_title = rootView.findViewById(R.id.question_title);
         radioGroup = rootView.findViewById(R.id.radiogroup);
-
         next_button = rootView.findViewById(R.id.button_next);
         Button skip_button = rootView.findViewById(R.id.button_skip);
-
         next_button.setVisibility(View.INVISIBLE);
         skip_button.setVisibility(View.VISIBLE);
 
+        //Listeners
         next_button.setOnClickListener(nextButtonListener);
-        skip_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
+        skip_button.setOnClickListener(skipButtonListener);
         return rootView;
     }
 
-    View.OnClickListener nextButtonListener = v -> {
+    View.OnClickListener skipButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 
+    View.OnClickListener nextButtonListener = v -> {
         String selection = "";
         for (RadioButton rb : radioButtons) {
-            if (rb.isChecked())  selection = rb.getText().toString();
+            if (rb.isChecked()) selection = rb.getText().toString();
         }
         Question q_data = (Question) getArguments().getSerializable("data");
-        Answers.getInstance().addAnswer(selection,q_data.getQuestion_id());
+        Answers.getInstance().addAnswer(selection, q_data.getQuestion_id());
         ((SurveyActivity) getActivity()).go_to_next(q_data.getReward());
     };
 
@@ -74,14 +75,11 @@ public class Select extends Fragment {
             if (rb.isChecked()) at_least_one_checked = true;
         }
 
-        if(at_least_one_checked)
-        {
-            if(((SurveyActivity) getActivity()).isLastQuestion()) next_button.setText("Finish");
+        if (at_least_one_checked) {
+            if (((SurveyActivity) getActivity()).isLastQuestion()) next_button.setText("Finish");
             next_button.setVisibility(View.VISIBLE);
-        }
-        else next_button.setVisibility(View.INVISIBLE);
+        } else next_button.setVisibility(View.INVISIBLE);
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -90,14 +88,11 @@ public class Select extends Fragment {
         Question q_data = (Question) getArguments().getSerializable("data");
         question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
-        String id = q_data.getQuestion_id();
-        String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetOptions/";
-
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                getOptionsURL + id,
+                "https://studev.groept.be/api/a18_sd308/GetOptions/" + q_data.getQuestion_id(),
                 null,
                 response -> {
                     List<String> options = new ArrayList<>();
@@ -117,13 +112,10 @@ public class Select extends Fragment {
                             rb.setText(choice);
                             rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             rb.setTextColor(getResources().getColor(R.color.almost_black));
-
                             rb.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.almost_black)));
-
                             rb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             radioGroup.addView(rb);
                             radioButtons.add(rb);
-
                             rb.setOnCheckedChangeListener((buttonView, isChecked) -> evaluateSelection());
                         }
                     }

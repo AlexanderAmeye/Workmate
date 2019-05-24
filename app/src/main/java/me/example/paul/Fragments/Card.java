@@ -29,6 +29,8 @@ public class Card extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reward, container, false);
+
+        //UI
         reward_title = view.findViewById(R.id.reward_title);
         reward_description = view.findViewById(R.id.reward_description);
         reward_icon = view.findViewById(R.id.reward_icon);

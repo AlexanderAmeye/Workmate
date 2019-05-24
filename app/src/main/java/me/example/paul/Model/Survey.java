@@ -10,8 +10,7 @@ public class Survey {
         return questions;
     }
 
-    public Question getQuestion(int index)
-    {
+    public Question getQuestion(int index) {
         return questions.get(index);
     }
 }

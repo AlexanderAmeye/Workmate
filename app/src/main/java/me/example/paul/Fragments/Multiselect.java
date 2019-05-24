@@ -9,18 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +34,6 @@ public class Multiselect extends Fragment {
     private LinearLayout checkboxLayout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
     private Button next_button;
-    private Button skip_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,32 +41,35 @@ public class Multiselect extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_multiselect, container, false);
 
-        question_title = (TextView) rootView.findViewById(R.id.question_title);
-        checkboxLayout = (LinearLayout) rootView.findViewById(R.id.checkboxes);
-
+        //UI
+        question_title = rootView.findViewById(R.id.question_title);
+        checkboxLayout = rootView.findViewById(R.id.checkboxes);
         next_button = rootView.findViewById(R.id.button_next);
-        skip_button = rootView.findViewById(R.id.button_skip);
-
+        Button skip_button = rootView.findViewById(R.id.button_skip);
         next_button.setVisibility(View.INVISIBLE);
         skip_button.setVisibility(View.VISIBLE);
 
-        skip_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
-
-        next_button.setOnClickListener(v -> {
-            Question q_data = (Question) getArguments().getSerializable("data");
-
-            int earnedCredits = 0;
-            for (String choice : getSelections()) {
-                if (getSelections().get(getSelections().size() - 1).equals(choice)) {
-                    Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
-                    earnedCredits += q_data.getReward();
-                } else Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
-            }
-            ((SurveyActivity) getActivity()).go_to_next(earnedCredits);
-
-        });
+        //Listeners
+        skip_button.setOnClickListener(skipButtonListener);
+        next_button.setOnClickListener(nextButtonListener);
         return rootView;
     }
+
+    View.OnClickListener nextButtonListener = v -> {
+        Question q_data = (Question) getArguments().getSerializable("data");
+
+        int earnedCredits = 0;
+        for (String choice : getSelections()) {
+            if (getSelections().get(getSelections().size() - 1).equals(choice)) {
+                Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
+                earnedCredits += q_data.getReward();
+            } else Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
+        }
+        ((SurveyActivity) getActivity()).go_to_next(earnedCredits);
+
+    };
+
+    View.OnClickListener skipButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 
     private ArrayList<String> getSelections() {
         ArrayList<String> selections = new ArrayList<>();
@@ -110,54 +108,40 @@ public class Multiselect extends Fragment {
         Question q_data = (Question) getArguments().getSerializable("data");
         question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
-        String id = q_data.getQuestion_id();
-        String getOptionsURL = "https://studev.groept.be/api/a18_sd308/GetOptions/";
-
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                getOptionsURL + id,
+                "https://studev.groept.be/api/a18_sd308/GetOptions/" + q_data.getQuestion_id(),
                 null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        List<String> options = new ArrayList<String>();
-                        if (response != null) {
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject object = response.getJSONObject(i);
-                                    options.add(object.get("text").toString());
+                response -> {
+                    List<String> options = new ArrayList<>();
+                    if (response != null) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                options.add(object.get("text").toString());
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                        }
 
-                            for (String choice : options) {
-                                CheckBox cb = new CheckBox(getActivity());
-                                cb.setText(choice);
-                                cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                                cb.setTextColor(getResources().getColor(R.color.almost_black));
-                                cb.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.almost_black)));
-                                cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                checkboxLayout.addView(cb);
-                                checkboxes.add(cb);
+                        for (String choice : options) {
+                            CheckBox cb = new CheckBox(getActivity());
+                            cb.setText(choice);
+                            cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            cb.setTextColor(getResources().getColor(R.color.almost_black));
+                            cb.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.almost_black)));
+                            cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            checkboxLayout.addView(cb);
+                            checkboxes.add(cb);
 
-                                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                        collect_data();
-                                    }
-                                });
-                            }
+                            cb.setOnCheckedChangeListener((buttonView, isChecked) -> collect_data());
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
+                error -> {
                 }
         );
         requestQueue.add(jsonArrayRequest);

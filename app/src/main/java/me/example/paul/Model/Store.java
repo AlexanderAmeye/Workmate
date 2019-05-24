@@ -10,8 +10,7 @@ public class Store {
         return rewards;
     }
 
-    public Reward getReward(int index)
-    {
+    public Reward getReward(int index) {
         return rewards.get(index);
     }
 }

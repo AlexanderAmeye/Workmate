@@ -40,16 +40,14 @@ import me.example.paul.R;
 
 public class SurveyActivity extends AppCompatActivity {
 
+    private RequestQueue requestQueue;
+
     private Survey survey;
     private ViewPager pager;
     ArrayList<Fragment> fragments;
     private LinearLayout dotLayout;
-    private TextView[] dots;
     private int currentPage;
-
     private int totalEarnedCredits;
-
-    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +194,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void addDotsIndicator(int position) {
-        dots = new TextView[fragments.size() - 1];
+        TextView[] dots = new TextView[fragments.size() - 1];
         dotLayout.removeAllViews();
 
         for (int i = 0; i < dots.length; i++) {

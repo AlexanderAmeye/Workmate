@@ -13,12 +13,11 @@ public class Answers {
         answers = new JSONArray();
     }
 
-    public void addAnswer(String text, String questionId){//, int reward) {
+    public void addAnswer(String text, String questionId) {
         JSONObject answer = new JSONObject();
         try {
             answer.put("text", text);
             answer.put("question_id", questionId);
-        //    answer.put("reward", reward);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -40,8 +39,7 @@ public class Answers {
         return uniqueInstance;
     }
 
-    public void clear()
-    {
+    public void clear() {
         answers = new JSONArray();
     }
 }

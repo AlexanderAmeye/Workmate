@@ -47,12 +47,10 @@ public class RewardsActivity extends AppCompatActivity {
     private ImageView cardActive, cardInactive;
 
     private Store store;
-    private ViewPager pager;
     ArrayList<Card> fragments;
 
     private int currentPage;
 
-    private Button purchaseButton;
     CardFragmentPagerAdapter pagerAdapter;
     private TextView balance;
     String balanceString;
@@ -73,8 +71,7 @@ public class RewardsActivity extends AppCompatActivity {
         cardActive = findViewById(R.id.card_active);
         cardInactive = findViewById(R.id.card_inactive);
         cardActive.setVisibility(View.INVISIBLE);
-        purchaseButton = findViewById(R.id.purchase_button);
-
+        Button purchaseButton = findViewById(R.id.purchase_button);
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -111,7 +108,7 @@ public class RewardsActivity extends AppCompatActivity {
             fragments.add(card);
         }
 
-        pager = findViewById(R.id.pager);
+        ViewPager pager = findViewById(R.id.pager);
         pagerAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(pager, pagerAdapter);
         fragmentCardShadowTransformer.enableScaling(false);
@@ -141,9 +138,8 @@ public class RewardsActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(RewardsActivity.this, "Insufficient Funds!", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            else Toast.makeText(RewardsActivity.this, "Card not found", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(RewardsActivity.this, "Card not found", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -230,7 +226,8 @@ public class RewardsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (nfcAvailable()) NFCHelper.enableForegroundDispatchSystem(this, nfcAdapter, RewardsActivity.class);
+        if (nfcAvailable())
+            NFCHelper.enableForegroundDispatchSystem(this, nfcAdapter, RewardsActivity.class);
         super.onResume();
     }
 
