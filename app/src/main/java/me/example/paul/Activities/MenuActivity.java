@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,6 +24,8 @@ public class MenuActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
     SessionManager sessionManager;
+
+    private TextView surveysMenuTitle;
 
     public static final int SURVEY_REQUEST = 8888;
 
@@ -41,11 +44,33 @@ public class MenuActivity extends AppCompatActivity {
         Button signoutButton = findViewById(R.id.signout_button);
         TextView welcomeText = findViewById(R.id.welcome_text);
         welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
+        surveysMenuTitle = findViewById(R.id.surveysMenuTitle);
+        showNumberOfUnansweredQuestions();
 
         //Listeners
         questions_card.setOnClickListener(questionsButtonListener);
         rewards_card.setOnClickListener(rewardsButtonListener);
         signoutButton.setOnClickListener(logoutButtonListener);
+    }
+
+    public void showNumberOfUnansweredQuestions()
+    {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                "https://studev.groept.be/api/a18_sd308/GetNumberOfUnansweredQuestions/" + sessionManager.getUserDetails().get("EMAIL"),
+                null,
+                response -> {
+                    try {
+                        int numberOfQuestions = response.getJSONObject(0).getInt("COUNT(*)");
+                        if(numberOfQuestions>0) surveysMenuTitle.setText(getString(R.string.unanswered_questions, Integer.toString(numberOfQuestions)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     View.OnClickListener questionsButtonListener = new View.OnClickListener() {
@@ -66,8 +91,7 @@ public class MenuActivity extends AppCompatActivity {
                         intent.putExtra("json_survey", questions.toString());
                         startActivityForResult(intent, SURVEY_REQUEST);
                     },
-                    error -> {
-                    }
+                    error -> Toast.makeText(MenuActivity.this, "No connection", Toast.LENGTH_SHORT).show()
             );
             requestQueue.add(jsonArrayRequest);
         }
@@ -91,8 +115,7 @@ public class MenuActivity extends AppCompatActivity {
                         intent.putExtra("json_rewards", rewards.toString());
                         startActivity(intent);
                     },
-                    error -> {
-                    }
+                    error -> Toast.makeText(MenuActivity.this, "No connection", Toast.LENGTH_SHORT).show()
             );
             requestQueue.add(jsonArrayRequest);
         }

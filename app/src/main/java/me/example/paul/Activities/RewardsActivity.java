@@ -88,15 +88,15 @@ public class RewardsActivity extends AppCompatActivity {
 
         for (Reward r : store.getRewards()) {
 
-            if (r.getCategory().equals("food")) {
+            if (r.getCategory().equals("Food")) {
                 r.setIcon(R.drawable.food);
             }
 
-            if (r.getCategory().equals("voucher")) {
+            if (r.getCategory().equals("Voucher")) {
                 r.setIcon(R.drawable.voucher);
             }
 
-            if (r.getCategory().equals("promotion")) {
+            if (r.getCategory().equals("Promotion")) {
                 r.setIcon(R.drawable.promotion);
             }
 

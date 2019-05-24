@@ -78,6 +78,7 @@
 
 
     <string name="welcome_message">Welcome %1$s,</string>
+    <string name="unanswered_questions">Surveys (%1$s)</string>
 
     <string-array name="multi_select_list_preference_default_value" />
 
