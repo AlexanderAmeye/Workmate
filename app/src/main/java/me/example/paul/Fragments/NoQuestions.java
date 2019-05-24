@@ -1,8 +1,6 @@
 package me.example.paul.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +20,7 @@ public class NoQuestions extends Fragment {
 
         Button next_button = rootView.findViewById(R.id.button_next);
         next_button.setVisibility(View.VISIBLE);
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(View v) {
-                ((SurveyActivity) getActivity()).go_to_next();
-            }
-        });
+        next_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
         return rootView;
     }
 

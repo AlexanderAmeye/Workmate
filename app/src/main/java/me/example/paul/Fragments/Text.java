@@ -39,20 +39,12 @@ public class Text extends Fragment {
         next_button.setVisibility(View.INVISIBLE);
         skip_button.setVisibility(View.VISIBLE);
 
-        skip_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SurveyActivity) getActivity()).go_to_next();
-            }
-        });
+        skip_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
 
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Question q_data = (Question) getArguments().getSerializable("data");
-                Answers.getInstance().addAnswer(answer.getText().toString(),q_data.getQuestion_id(), q_data.getReward());
-                ((SurveyActivity) getActivity()).go_to_next();
-            }
+        next_button.setOnClickListener(v -> {
+            Question q_data = (Question) getArguments().getSerializable("data");
+            Answers.getInstance().addAnswer(answer.getText().toString(),q_data.getQuestion_id());
+            ((SurveyActivity) getActivity()).go_to_next(q_data.getReward());
         });
         return rootView;
     }

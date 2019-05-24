@@ -51,7 +51,6 @@ public class SurveyActivity extends AppCompatActivity {
 
     private int totalEarnedCredits;
 
-
     private RequestQueue requestQueue;
 
     @Override
@@ -117,12 +116,19 @@ public class SurveyActivity extends AppCompatActivity {
         pager.addOnPageChangeListener(viewListener);
     }
 
-    public void go_to_next() {
+    public void go_to_next(int earnedCredits) {
         if (currentPage == fragments.size() - 1) {
+            totalEarnedCredits+=earnedCredits;
             event_survey_completed(Answers.getInstance());
         } else {
+            totalEarnedCredits+=earnedCredits;
             pager.setCurrentItem(pager.getCurrentItem() + 1);
         }
+    }
+
+    public int getTotalEarnedCredits()
+    {
+        return totalEarnedCredits;
     }
 
     public void event_survey_completed(Answers instance) {
@@ -134,7 +140,7 @@ public class SurveyActivity extends AppCompatActivity {
                 JSONObject answer = answers.getJSONObject(i);
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
-                totalEarnedCredits += answer.getInt("reward");
+               // totalEarnedCredits += answer.getInt("reward");
                 addVote(id, email, text);
             } catch (JSONException e) {
                 e.printStackTrace();

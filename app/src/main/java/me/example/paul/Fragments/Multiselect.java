@@ -55,27 +55,24 @@ public class Multiselect extends Fragment {
         next_button.setVisibility(View.INVISIBLE);
         skip_button.setVisibility(View.VISIBLE);
 
-        skip_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SurveyActivity) getActivity()).go_to_next();
-            }
-        });
+        skip_button.setOnClickListener(v -> ((SurveyActivity) getActivity()).go_to_next(0));
 
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Question q_data = (Question) getArguments().getSerializable("data");
+        next_button.setOnClickListener(v -> {
+            Question q_data = (Question) getArguments().getSerializable("data");
 
-                for (String choice : getSelections()) {
-                    if(getSelections().get(getSelections().size()-1).equals(choice))
-                    {
-                        Answers.getInstance().addAnswer(choice,  q_data.getQuestion_id(), q_data.getReward());
-                    }
-                    else Answers.getInstance().addAnswer(choice,  q_data.getQuestion_id(), 0);
+            for (String choice : getSelections()) {
+                if(getSelections().get(getSelections().size()-1).equals(choice))
+                {
+                    Answers.getInstance().addAnswer(choice,q_data.getQuestion_id());
+                    ((SurveyActivity) getActivity()).go_to_next(q_data.getReward());
                 }
-                ((SurveyActivity) getActivity()).go_to_next();
+                else
+                {
+                    Answers.getInstance().addAnswer(choice,q_data.getQuestion_id());
+                    ((SurveyActivity) getActivity()).go_to_next(0);
+                }
             }
+
         });
         return rootView;
     }
