@@ -2,6 +2,7 @@ package me.example.paul.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MenuActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     private TextView surveysMenuTitle;
+    private SwipeRefreshLayout pullToRefresh;
 
     public static final int SURVEY_REQUEST = 8888;
 
@@ -46,15 +48,24 @@ public class MenuActivity extends AppCompatActivity {
         welcomeText.setText(getString(R.string.welcome_message, sessionManager.getUserDetails().get("NAME")));
         surveysMenuTitle = findViewById(R.id.surveysMenuTitle);
         showNumberOfUnansweredQuestions();
+        pullToRefresh = findViewById(R.id.pullToRefresh);
 
         //Listeners
         questions_card.setOnClickListener(questionsButtonListener);
         rewards_card.setOnClickListener(rewardsButtonListener);
         signoutButton.setOnClickListener(logoutButtonListener);
+        pullToRefresh.setOnRefreshListener(refreshListener);
     }
 
-    public void showNumberOfUnansweredQuestions()
-    {
+    SwipeRefreshLayout.OnRefreshListener refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            showNumberOfUnansweredQuestions();
+            pullToRefresh.setRefreshing(false);
+        }
+    };
+
+    public void showNumberOfUnansweredQuestions() {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 "https://studev.groept.be/api/a18_sd308/GetNumberOfUnansweredQuestions/" + sessionManager.getUserDetails().get("EMAIL"),
@@ -62,7 +73,8 @@ public class MenuActivity extends AppCompatActivity {
                 response -> {
                     try {
                         int numberOfQuestions = response.getJSONObject(0).getInt("COUNT(*)");
-                        if(numberOfQuestions>0) surveysMenuTitle.setText(getString(R.string.unanswered_questions, Integer.toString(numberOfQuestions)));
+                        if (numberOfQuestions > 0)
+                            surveysMenuTitle.setText(getString(R.string.unanswered_questions, Integer.toString(numberOfQuestions)));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
