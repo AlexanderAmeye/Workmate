@@ -71,6 +71,7 @@ public class RewardsActivity extends AppCompatActivity {
         cardInactive = findViewById(R.id.card_inactive);
         cardActive.setVisibility(View.INVISIBLE);
         Button purchaseButton = findViewById(R.id.purchase_button);
+        Button backButton = findViewById(R.id.backButton);
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -119,7 +120,13 @@ public class RewardsActivity extends AppCompatActivity {
         //Listeners
         pager.addOnPageChangeListener(viewListener);
         purchaseButton.setOnClickListener(purchaseButtonListener);
+        backButton.setOnClickListener(backButtonListener);
     }
+
+    View.OnClickListener backButtonListener = v -> {
+        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+        startActivity(intent);
+    };
 
     View.OnClickListener purchaseButtonListener = new View.OnClickListener() {
         @Override
