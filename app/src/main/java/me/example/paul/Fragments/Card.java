@@ -48,6 +48,8 @@ public class Card extends Fragment {
         return reward_price.getText().toString();
     }
 
+    public String getRewardName(){return reward_title.getText().toString();}
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

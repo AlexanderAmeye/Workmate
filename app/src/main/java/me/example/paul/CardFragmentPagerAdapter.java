@@ -35,6 +35,8 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         return fragments.get(position).getReward_price();
     }
 
+    public String getRewardName(int position){return fragments.get(position).getRewardName();}
+
     public int getPosition(Fragment frag) {
         return this.fragments.indexOf(frag);
     }
