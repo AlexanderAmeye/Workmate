@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
     private ProgressDialog progressDialog;
-    private TextView noAccountYet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.emailField);
         progressDialog = new ProgressDialog(this);
         Button loginButton = findViewById(R.id.registerButton);
-        noAccountYet = findViewById(R.id.noAccount);
+        TextView noAccountYet = findViewById(R.id.noAccount);
 
         //Listeners
         loginButton.setOnClickListener(v -> Login());
