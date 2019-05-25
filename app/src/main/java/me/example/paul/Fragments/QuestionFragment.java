@@ -35,8 +35,7 @@ public class QuestionFragment extends Fragment {
         return view;
     }
 
-    public Button getNextButton()
-    {
+    public Button getNextButton() {
         return next_button;
     }
 
@@ -47,6 +46,39 @@ public class QuestionFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-        question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
+
+        String questionTitle = q_data.getQuestionTitle();
+        String addSpaces = splitCamelCase(questionTitle);
+        StringBuilder removeUpperCase = removeUpperCase(addSpaces);
+
+        question_title.setText(removeUpperCase);
+    }
+
+    static StringBuilder removeUpperCase(String s) {
+        String[] words = s.split("\\s+");
+        StringBuilder parsedTitle = new StringBuilder();
+        for (String word : words) {
+            String newWord = "";
+            if (!words[0].equals(word)) {
+                newWord = word.substring(0, 1).toLowerCase() + word.substring(1);
+                parsedTitle.append(" ");
+                parsedTitle.append(newWord);
+            } else {
+                parsedTitle.append(" ");
+                parsedTitle.append(word);
+            }
+        }
+
+        return parsedTitle;
+    }
+
+    static String splitCamelCase(String s) {
+        return s.replaceAll(
+                String.format("%s|%s",
+                        "(?<=[A-Z])(?=[A-Z][a-z])",
+                        "(?<=[^A-Z])(?=[A-Z])"
+                ),
+                " "
+        );
     }
 }

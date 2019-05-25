@@ -21,9 +21,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activities.MenuActivity" />
         <activity
-            android:name=".DeveloperSettings"
-            android:label="@string/title_activity_developer_settings" />
-        <activity
             android:name=".Activities.RegisterActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait">

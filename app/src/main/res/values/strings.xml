@@ -1,85 +1,44 @@
 <resources>
     <string name="app_name">Workmate</string>
-    <string name="string_input_field_hint">String</string>
-    <string name="button_send">Send</string>
-    <string-array name="ReceivedStrings">
-        <item>a</item>
-        <item>b</item>
-        <item>c</item>
-    </string-array>
-
-    <string-array name="Dates">
-        <item>x</item>
-        <item>y</item>
-        <item>z</item>
-    </string-array>
-    <string name="title_activity_database">DatabaseActivity</string>
-    <string name="title_activity_json">JsonActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_developer_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">IP Address</string>
-    <string name="pref_default_display_name">192.168.137.1</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
 
     <string name="welcome_message">Welcome %1$s,</string>
+    <string name="welcome_message_2">We hope you\'re having a great day</string>
     <string name="unanswered_questions">Surveys (%1$s)</string>
     <string name="earned_rewards">You earned %1$d credits!</string>
+
+    <string name="surveys_card_title">Surveys</string>
+    <string name="rewards_card_title">Rewards</string>
+    <string name="health_card_title">Health</string>
+    <string name="performance_card_title">Performance</string>
+    <string name="surveys_card_description">Give feedback and earn credits</string>
+    <string name="rewards_card_description">Purchase rewards with credits</string>
+    <string name="health_card_description">Connect your RFID tag and track your health</string>
+    <string name="performance_card_description">Monitor your work performance</string>
+
+    <string name="rewards_balance">Total Balance</string>
+
+    <string name="already_have_account">Already have an account?</string>
+    <string name="no_account_yet">No account yet?</string>
+
+    <string name="username_hint">Username</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+
+    <string name="login_screen_title">Login Now</string>
+    <string name="login_screen_description">Please login to continue using our app.</string>
+
+    <string name="register_screen_title">Register Now</string>
+    <string name="register_screen_description">Please register to use our app.</string>
+
+
+
+
+
+
+
+
+
 
     <string-array name="multi_select_list_preference_default_value" />
 

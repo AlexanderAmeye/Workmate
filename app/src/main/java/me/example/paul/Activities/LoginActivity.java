@@ -10,7 +10,6 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView noAccountYet = findViewById(R.id.noAccount);
 
         //Listeners
-        loginButton.setOnClickListener(v -> Login());
+        loginButton.setOnClickListener(loginButtonListener);
         emailField.addTextChangedListener(emailFieldTextWatcher);
         passwordField.addTextChangedListener(passwordFieldTextWatcher);
     }
@@ -67,6 +66,14 @@ public class LoginActivity extends AppCompatActivity {
     public boolean nfcAvailable() {
         return (nfcAdapter != null && nfcAdapter.isEnabled());
     }
+
+    View.OnClickListener loginButtonListener = v -> {
+        try {
+            Login();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    };
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -131,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    public void Login() {
+    public void Login() throws Exception {
         final String email = emailField.getText().toString().trim();
         final String password = passwordField.getText().toString().trim();
 
@@ -141,37 +148,19 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.setMessage("Login in progress");
             progressDialog.show();
 
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetUser/" + email, null, response -> {
-                if (response.length() != 0) { //user was found for given email
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/CheckIfValidCredentials/" + email + "/" + AESCrypt.encrypt(password), null, response -> {
+                if (response.length() > 0) { //user was found for given email + password combination
+                    progressDialog.dismiss();
+                    JSONObject object;
                     try {
-                        JSONObject object = response.getJSONObject(0);
-                        String found_password = object.get("password").toString();
-                        String found_username = object.get("username").toString();
-                        String found_email = object.get("email").toString();
-
-                      if (AESCrypt.decrypt(found_password).equals(password)) {
-                       // if (found_password.equals(password)) {
-                            progressDialog.dismiss();
-                            sessionManager.createSession(found_username, found_email);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
-                            passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
-                            progressDialog.dismiss();
-                        }
+                        object = response.getJSONObject(0);
+                        sessionManager.createSession(object.get("username").toString(), object.get("email").toString());
                     } catch (JSONException e) {
-                        Toast.makeText(LoginActivity.this, "Failed to get data from server", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        Toast.makeText(LoginActivity.this, "Failed to decrypt password", Toast.LENGTH_SHORT).show();
-                        Log.e("PASSWORD",e.getMessage());
-                        passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
-                        progressDialog.dismiss();
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Email not recognised", Toast.LENGTH_SHORT).show();
-                    emailField.setBackgroundResource(R.drawable.input_box_incorrect);
+                    Toast.makeText(LoginActivity.this, "Email/password not recognised\"", Toast.LENGTH_SHORT).show();
+                    passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
                     progressDialog.dismiss();
                 }
             }, error -> {
