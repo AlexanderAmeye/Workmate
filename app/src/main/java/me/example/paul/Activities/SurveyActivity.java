@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -111,7 +112,13 @@ public class SurveyActivity extends AppCompatActivity {
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
-        pager.addOnPageChangeListener(viewListener);
+
+        //Listeners
+        pager.addOnPageChangeListener(viewPagerListener);
+    }
+
+    public boolean isLastQuestion() {
+        return currentPage == fragments.size() - 2;
     }
 
     public void go_to_next(int earnedCredits) {
@@ -167,7 +174,7 @@ public class SurveyActivity extends AppCompatActivity {
         }, error -> {
             error.printStackTrace();
             Log.e("VOLLEY", error.toString());
-            Toast.makeText(SurveyActivity.this, "Voting failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(SurveyActivity.this, "Voting failed", Toast.LENGTH_SHORT).show();
         }) {
             @Override
             protected Map<String, String> getParams() {
@@ -181,7 +188,7 @@ public class SurveyActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    public void addDotsIndicator(int position) {
+    public void addDotsIndicator(int currentPosition) {
         TextView[] dots = new TextView[fragments.size() - 1];
         dotLayout.removeAllViews();
 
@@ -189,21 +196,16 @@ public class SurveyActivity extends AppCompatActivity {
             dots[i] = new TextView(this);
             dots[i].setText(Html.fromHtml("&#8226"));
             dots[i].setTextSize(35);
-            dots[i].setTextColor(getResources().getColor(R.color.colorTransparentWhite));
+            dots[i].setTextColor(ContextCompat.getColor(this, R.color.indicatorGrey));
             dotLayout.addView(dots[i]);
         }
 
-        if (dots.length > 0 && position < dots.length) {
-            dots[position].setTextColor(getResources().getColor(R.color.violet));
-            dots[position].setTextSize(35);
+        if (dots.length > 0 && currentPosition < dots.length) {
+            dots[currentPosition].setTextColor(ContextCompat.getColor(this, R.color.indicatorBlue));
         }
     }
 
-    public boolean isLastQuestion() {
-        return currentPage == fragments.size() - 2;
-    }
-
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener viewPagerListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
         }
