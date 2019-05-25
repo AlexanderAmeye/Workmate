@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -149,7 +150,8 @@ public class LoginActivity extends AppCompatActivity {
                         String found_username = object.get("username").toString();
                         String found_email = object.get("email").toString();
 
-                        if (AESCrypt.decrypt(found_password).equals(password)) {
+                      if (AESCrypt.decrypt(found_password).equals(password)) {
+                       // if (found_password.equals(password)) {
                             progressDialog.dismiss();
                             sessionManager.createSession(found_username, found_email);
                         } else {
@@ -163,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     } catch (Exception e) {
                         Toast.makeText(LoginActivity.this, "Failed to decrypt password", Toast.LENGTH_SHORT).show();
+                        Log.e("PASSWORD",e.getMessage());
                         passwordField.setBackgroundResource(R.drawable.input_box_incorrect);
                         progressDialog.dismiss();
                         e.printStackTrace();

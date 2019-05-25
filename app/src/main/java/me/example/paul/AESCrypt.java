@@ -18,6 +18,7 @@ public class AESCrypt {
         byte[] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
         String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
         return encryptedValue64;
+
     }
 
     public static String decrypt(String value) throws Exception {
@@ -28,6 +29,7 @@ public class AESCrypt {
         byte[] decryptedByteValue = cipher.doFinal(decryptedValue64);
         String decryptedValue = new String(decryptedByteValue, "utf-8");
         return decryptedValue;
+
     }
 
     private static Key generateKey() throws Exception {
