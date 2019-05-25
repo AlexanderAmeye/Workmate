@@ -36,8 +36,7 @@ public class SurveyEnd extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser)
             earnedCredits.setText(getString(R.string.earned_rewards, ((SurveyActivity) getActivity()).getTotalEarnedCredits()));
-        }
     }
 }

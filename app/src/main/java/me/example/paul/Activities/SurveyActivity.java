@@ -41,13 +41,15 @@ import me.example.paul.R;
 public class SurveyActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
+    private String userEmail;
 
     private Survey survey;
-    private ViewPager pager;
-    ArrayList<Fragment> fragments;
-    private LinearLayout dotLayout;
     private int currentPage;
     private int totalEarnedCredits;
+    ArrayList<Fragment> fragments;
+
+    private ViewPager pager;
+    private LinearLayout dotLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +58,14 @@ public class SurveyActivity extends AppCompatActivity {
 
         //System
         requestQueue = Volley.newRequestQueue(this);
+        userEmail = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
 
         //UI
         dotLayout = findViewById(R.id.dots);
+        pager = findViewById(R.id.pager);
 
         //Survey
         Answers.getInstance().clear();
-        totalEarnedCredits = 0;
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             survey = new Gson().fromJson(bundle.getString("json_survey"), Survey.class); //this maps the json onto the survey class
@@ -70,28 +73,28 @@ public class SurveyActivity extends AppCompatActivity {
 
         fragments = new ArrayList<>();
 
-        for (Question q : survey.getQuestions()) {
-            if (q.getQuestionType().equals("String")) {
+        for (Question question : survey.getQuestions()) {
+            if (question.getQuestionType().equals("String")) {
+                Bundle bundle = new Bundle(); //bundle is used to pass data from activity to fragment
+                bundle.putSerializable("data", question); //when we want to pass an object, we need to serialize it
                 Text frag = new Text();
-                Bundle xBundle = new Bundle();
-                xBundle.putSerializable("data", q);
-                frag.setArguments(xBundle);
+                frag.setArguments(bundle);
                 fragments.add(frag);
             }
 
-            if (q.getQuestionType().equals("Multiselect")) {
+            if (question.getQuestionType().equals("Multiselect")) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", question);
                 Multiselect frag = new Multiselect();
-                Bundle xBundle = new Bundle();
-                xBundle.putSerializable("data", q);
-                frag.setArguments(xBundle);
+                frag.setArguments(bundle);
                 fragments.add(frag);
             }
 
-            if (q.getQuestionType().equals("Select")) {
+            if (question.getQuestionType().equals("Select")) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", question);
                 Select frag = new Select();
-                Bundle xBundle = new Bundle();
-                xBundle.putSerializable("data", q);
-                frag.setArguments(xBundle);
+                frag.setArguments(bundle);
                 fragments.add(frag);
             }
         }
@@ -102,24 +105,19 @@ public class SurveyActivity extends AppCompatActivity {
         } else {
             SurveyEnd frag = new SurveyEnd();
             fragments.add(frag);
-            if (fragments.size() > 2) addDotsIndicator(0);
+            if (fragments.size() > 2)
+                addDotsIndicator(0); //don't show dots when there is only 1 question
         }
 
-        pager = findViewById(R.id.pager);
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
-
         pager.addOnPageChangeListener(viewListener);
     }
 
     public void go_to_next(int earnedCredits) {
-        if (currentPage == fragments.size() - 1) {
-            totalEarnedCredits += earnedCredits;
-            event_survey_completed(Answers.getInstance());
-        } else {
-            totalEarnedCredits += earnedCredits;
-            pager.setCurrentItem(pager.getCurrentItem() + 1);
-        }
+        totalEarnedCredits += earnedCredits;
+        if (currentPage == fragments.size() - 1) event_survey_completed(Answers.getInstance());
+        else pager.setCurrentItem(pager.getCurrentItem() + 1);
     }
 
     public int getTotalEarnedCredits() {
@@ -128,54 +126,44 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void event_survey_completed(Answers instance) {
         JSONArray answers = instance.getAnswers();
-        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
 
         for (int i = 0; i < answers.length(); i++) {
             try {
                 JSONObject answer = answers.getJSONObject(i);
                 String id = answer.getString("question_id");
                 String text = answer.getString("text");
-                addVote(id, email, text);
+                addVote(id, text);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        calculateTotalCredits(totalEarnedCredits);
+        if (totalEarnedCredits > 0) {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetBalance/" + userEmail, null, response -> {
+                try {
+                    updateBalance(response.getJSONObject(0).getInt("balance") + totalEarnedCredits);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }, error -> {
+            });
+            requestQueue.add(request);
+        }
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
-    public void calculateTotalCredits(final int newCredits) {
-        if (newCredits > 0) {
-            String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetBalance/" + email, null, response -> {
-                try {
-                    JSONObject obj = response.getJSONObject(0);
-                    int currentbalance = obj.getInt("balance");
-                    updateBalance(currentbalance + newCredits);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }, error -> {
-            });
-            requestQueue.add(request);
-        }
-    }
-
     public void updateBalance(int credits) {
-        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/UpdateBalance/" + credits + "/" + email, null, response -> {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/UpdateBalance/" + credits + "/" + userEmail, null, response -> {
         }, error -> {
         });
         requestQueue.add(request);
     }
 
-    public void addVote(final String id, final String email, final String text) {
-        StringRequest request = new StringRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/Addvote/" + id + "/" + email + "/" + text, response -> {
+    public void addVote(final String id, final String text) {
+        StringRequest request = new StringRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/Addvote/" + id + "/" + userEmail + "/" + text, response -> {
         }, error -> {
             error.printStackTrace();
             Log.e("VOLLEY", error.toString());
@@ -185,7 +173,7 @@ public class SurveyActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();
                 map.put("questions_question_id", id);
-                map.put("users_email", email);
+                map.put("users_email", userEmail);
                 map.put("text", text);
                 return map;
             }
