@@ -10,8 +10,10 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
     private ProgressDialog progressDialog;
+    private TextView noAccountYet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.emailField);
         progressDialog = new ProgressDialog(this);
         Button loginButton = findViewById(R.id.registerButton);
+        noAccountYet = findViewById(R.id.noAccount);
 
         //Listeners
         loginButton.setOnClickListener(v -> Login());
@@ -145,8 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                         String found_username = object.get("username").toString();
                         String found_email = object.get("email").toString();
 
-                        if (AESCrypt.decrypt(found_password).equals(password))
-                        {
+                        if (AESCrypt.decrypt(found_password).equals(password)) {
                             progressDialog.dismiss();
                             sessionManager.createSession(found_username, found_email);
                         } else {
@@ -176,5 +179,10 @@ public class LoginActivity extends AppCompatActivity {
             );
             requestQueue.add(request);
         }
+    }
+
+    public void onClick(View view) {
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(intent);
     }
 }

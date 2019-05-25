@@ -25,6 +25,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private RequestQueue requestQueue;
     SessionManager sessionManager;
+    private String userEmail;
 
     private TextView surveysMenuTitle;
     private SwipeRefreshLayout pullToRefresh;
@@ -39,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
         //System
         requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(this);
+        userEmail = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
 
         //UI
         CardView questions_card = findViewById(R.id.questions_card);
@@ -68,7 +70,7 @@ public class MenuActivity extends AppCompatActivity {
     public void showNumberOfUnansweredQuestions() {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                "https://studev.groept.be/api/a18_sd308/GetNumberOfUnansweredQuestions/" + sessionManager.getUserDetails().get("EMAIL"),
+                "https://studev.groept.be/api/a18_sd308/GetNumberOfUnansweredQuestions/" + userEmail,
                 null,
                 response -> {
                     try {
@@ -90,7 +92,7 @@ public class MenuActivity extends AppCompatActivity {
         public void onClick(View v) {
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
-                    "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/" + sessionManager.getUserDetails().get("EMAIL"),
+                    "https://studev.groept.be/api/a18_sd308/GetUnansweredQuestions/" + userEmail,
                     null,
                     response -> {
                         Intent intent = new Intent(getApplicationContext(), SurveyActivity.class);
