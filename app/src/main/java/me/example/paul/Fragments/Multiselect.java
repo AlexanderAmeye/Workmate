@@ -27,6 +27,8 @@ import me.example.paul.R;
 
 public class Multiselect extends QuestionFragment {
 
+    private RequestQueue requestQueue;
+
     private LinearLayout checkboxLayout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
 
@@ -35,6 +37,9 @@ public class Multiselect extends QuestionFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflateFragment(R.layout.fragment_multiselect, inflater, container);
+
+        //System
+        requestQueue = Volley.newRequestQueue(getActivity());
 
         //UI
         checkboxLayout = rootView.findViewById(R.id.checkboxes);
@@ -55,7 +60,6 @@ public class Multiselect extends QuestionFragment {
             } else Answers.getInstance().addAnswer(choice, q_data.getQuestion_id());
         }
         ((SurveyActivity) getActivity()).go_to_next(earnedCredits);
-
     };
 
     private ArrayList<String> getSelections() {
@@ -93,8 +97,6 @@ public class Multiselect extends QuestionFragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,

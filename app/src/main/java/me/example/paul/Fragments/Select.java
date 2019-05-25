@@ -28,6 +28,8 @@ import me.example.paul.R;
 
 public class Select extends QuestionFragment {
 
+    private RequestQueue requestQueue;
+
     private RadioGroup radioGroup;
     private final ArrayList<RadioButton> radioButtons = new ArrayList<>();
 
@@ -36,6 +38,9 @@ public class Select extends QuestionFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflateFragment(R.layout.fragment_select, inflater, container);
+
+        //System
+        requestQueue = Volley.newRequestQueue(getActivity());
 
         //UI
         radioGroup = rootView.findViewById(R.id.radiogroup);
@@ -74,8 +79,6 @@ public class Select extends QuestionFragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
