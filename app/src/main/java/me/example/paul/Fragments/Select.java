@@ -2,16 +2,13 @@ package me.example.paul.Fragments;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,34 +26,24 @@ import me.example.paul.Model.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
-public class Select extends Fragment {
+public class Select extends QuestionFragment {
 
-    private TextView question_title;
-    private Button next_button;
     private RadioGroup radioGroup;
     private final ArrayList<RadioButton> radioButtons = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_select, container, false);
+
+        View rootView = inflateFragment(R.layout.fragment_select, inflater, container);
 
         //UI
-        question_title = rootView.findViewById(R.id.question_title);
         radioGroup = rootView.findViewById(R.id.radiogroup);
-        next_button = rootView.findViewById(R.id.button_next);
-        Button skip_button = rootView.findViewById(R.id.button_skip);
-        next_button.setVisibility(View.INVISIBLE);
-        skip_button.setVisibility(View.VISIBLE);
 
         //Listeners
-        next_button.setOnClickListener(nextButtonListener);
-        skip_button.setOnClickListener(skipButtonListener);
+        getNextButton().setOnClickListener(nextButtonListener);
         return rootView;
     }
-
-    View.OnClickListener skipButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 
     View.OnClickListener nextButtonListener = v -> {
         String selection = "";
@@ -76,9 +63,10 @@ public class Select extends Fragment {
         }
 
         if (at_least_one_checked) {
-            if (((SurveyActivity) getActivity()).isLastQuestion()) next_button.setText("Finish");
-            next_button.setVisibility(View.VISIBLE);
-        } else next_button.setVisibility(View.INVISIBLE);
+            if (((SurveyActivity) getActivity()).isLastQuestion())
+                getNextButton().setText("Finish");
+            getNextButton().setVisibility(View.VISIBLE);
+        } else getNextButton().setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -86,7 +74,6 @@ public class Select extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-        question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 

@@ -2,15 +2,12 @@ package me.example.paul.Fragments;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,30 +25,22 @@ import me.example.paul.Model.Answers;
 import me.example.paul.Model.Question;
 import me.example.paul.R;
 
-public class Multiselect extends Fragment {
+public class Multiselect extends QuestionFragment {
 
-    private TextView question_title;
     private LinearLayout checkboxLayout;
     private final ArrayList<CheckBox> checkboxes = new ArrayList<>();
-    private Button next_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_multiselect, container, false);
+
+        View rootView = inflateFragment(R.layout.fragment_multiselect, inflater, container);
 
         //UI
-        question_title = rootView.findViewById(R.id.question_title);
         checkboxLayout = rootView.findViewById(R.id.checkboxes);
-        next_button = rootView.findViewById(R.id.button_next);
-        Button skip_button = rootView.findViewById(R.id.button_skip);
-        next_button.setVisibility(View.INVISIBLE);
-        skip_button.setVisibility(View.VISIBLE);
 
         //Listeners
-        skip_button.setOnClickListener(skipButtonListener);
-        next_button.setOnClickListener(nextButtonListener);
+        getNextButton().setOnClickListener(nextButtonListener);
         return rootView;
     }
 
@@ -68,8 +57,6 @@ public class Multiselect extends Fragment {
         ((SurveyActivity) getActivity()).go_to_next(earnedCredits);
 
     };
-
-    View.OnClickListener skipButtonListener = v -> ((SurveyActivity) getActivity()).go_to_next(0);
 
     private ArrayList<String> getSelections() {
         ArrayList<String> selections = new ArrayList<>();
@@ -93,11 +80,11 @@ public class Multiselect extends Fragment {
 
         if (at_least_one_checked) {
             if (((SurveyActivity) getActivity()).isLastQuestion()) {
-                next_button.setText("Finish");
+                getNextButton().setText("Finish");
             }
-            next_button.setVisibility(View.VISIBLE);
+            getNextButton().setVisibility(View.VISIBLE);
         } else {
-            next_button.setVisibility(View.INVISIBLE);
+            getNextButton().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -106,7 +93,6 @@ public class Multiselect extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-        question_title.setText(q_data != null ? q_data.getQuestionTitle() : "");
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
