@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RewardsActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activities.MenuActivity"></activity>
         <activity android:name=".Activities.MenuActivity" />
         <activity

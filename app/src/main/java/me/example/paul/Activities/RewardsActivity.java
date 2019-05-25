@@ -1,6 +1,7 @@
 package me.example.paul.Activities;
 
 import android.content.Intent;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -42,7 +43,12 @@ public class RewardsActivity extends AppCompatActivity {
     SessionManager sessionManager;
     NfcAdapter nfcAdapter;
 
+    private Tag connectedTag;
+
     private boolean nfcConnected = false;
+
+
+    private NdefMessage message = null;
 
     private ImageView cardActive, cardInactive;
 
@@ -125,7 +131,6 @@ public class RewardsActivity extends AppCompatActivity {
     View.OnClickListener purchaseButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             if (nfcConnected) {
                 int price = Integer.parseInt(pagerAdapter.getPrice(currentPage));
                 int userBalance = Integer.parseInt(balanceString);
@@ -133,6 +138,11 @@ public class RewardsActivity extends AppCompatActivity {
                     int newBalance = userBalance - price;
                     balance.setText(Integer.toString(newBalance));
                     balanceString = Integer.toString(newBalance);
+
+                    message = NFCHelper.createTextMessage("Alex");
+                    NFCHelper.disableForegroundDispatchSystem(RewardsActivity.this, nfcAdapter);
+                    NFCHelper.enableForegroundDispatchSystem(RewardsActivity.this, nfcAdapter, RewardsActivity.class);
+
                     setUserBalance(newBalance);
                     Toast.makeText(RewardsActivity.this, "Reward Purchased!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -211,18 +221,26 @@ public class RewardsActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
-            nfcConnected = true;
-            cardActive.setVisibility(View.VISIBLE);
-            cardInactive.setVisibility(View.INVISIBLE);
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            nfcAdapter.ignore(tag, 1000, () -> {
-                cardActive.setVisibility(View.INVISIBLE);
-                cardInactive.setVisibility(View.VISIBLE);
-                nfcConnected = false;
-            }, new Handler(Looper.getMainLooper()));
+
+        nfcConnected = true;
+        cardActive.setVisibility(View.VISIBLE);
+        cardInactive.setVisibility(View.INVISIBLE);
+        connectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+        if (message != null) {
+            NFCHelper.writeTag(connectedTag, message);
+            message = null;
+            Toast.makeText(RewardsActivity.this, "Tag Written", Toast.LENGTH_LONG).show();
         }
+
+
+        nfcAdapter.ignore(connectedTag, 1000, () -> {
+            cardActive.setVisibility(View.INVISIBLE);
+            cardInactive.setVisibility(View.VISIBLE);
+            nfcConnected = false;
+        }, new Handler(Looper.getMainLooper()));
     }
+
 
     @Override
     protected void onResume() {
