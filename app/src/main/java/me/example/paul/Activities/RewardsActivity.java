@@ -84,22 +84,10 @@ public class RewardsActivity extends AppCompatActivity {
         getUserBalance();
 
         for (Reward r : store.getRewards()) {
-
-            if (r.getCategory().equals("Food")) {
-                r.setIcon(R.drawable.food);
-            }
-
-            if (r.getCategory().equals("Voucher")) {
-                r.setIcon(R.drawable.voucher);
-            }
-
-            if (r.getCategory().equals("Promotion")) {
-                r.setIcon(R.drawable.promotion);
-            }
-
-            if (r.getCategory().equals("")) {
-                r.setIcon(R.drawable.promotion);
-            }
+            if (r.getCategory().equals("Food")) r.setIcon(R.drawable.food);
+            if (r.getCategory().equals("Voucher")) r.setIcon(R.drawable.voucher);
+            if (r.getCategory().equals("Promotion")) r.setIcon(R.drawable.promotion);
+            if (r.getCategory().equals("")) r.setIcon(R.drawable.promotion);
 
             Card card = new Card();
             Bundle xBundle = new Bundle();
