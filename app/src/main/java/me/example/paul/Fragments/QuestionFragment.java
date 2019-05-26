@@ -25,7 +25,6 @@ public class QuestionFragment extends Fragment {
         question_title = view.findViewById(R.id.question_title);
         Button skip_button = view.findViewById(R.id.button_skip);
         skip_button.setVisibility(View.VISIBLE);
-
         next_button = view.findViewById(R.id.button_next);
         next_button.setVisibility(View.INVISIBLE);
 
@@ -47,9 +46,6 @@ public class QuestionFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         Question q_data = (Question) getArguments().getSerializable("data");
-
-        String questionTitle = q_data.getQuestionTitle();
-
-        question_title.setText(StringParser.parseSentence(questionTitle));
+        question_title.setText(StringParser.parseSentence(q_data.getQuestionTitle()));
     }
 }

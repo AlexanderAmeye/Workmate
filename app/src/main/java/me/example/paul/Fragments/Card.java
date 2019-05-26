@@ -48,21 +48,19 @@ public class Card extends Fragment {
         return reward_price.getText().toString();
     }
 
-    public String getRewardName(){return reward_title.getText().toString();}
+    public String getRewardName() {
+        return reward_title.getText().toString();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Reward r_data = (Reward) getArguments().getSerializable("data");
 
-        String rewardTitle = r_data.getTitle();
-        String rewardDescription = r_data.getDescription();
-        int rewardIcon = r_data.getIcon();
-        String rewardPrice = r_data.getPrice();
-
-        reward_title.setText(StringParser.parseSentence(rewardTitle));
-        reward_description.setText(StringParser.parseSentence(rewardDescription));
-        reward_icon.setImageResource(rewardIcon);
-        reward_price.setText(rewardPrice);
+        reward_title.setText(StringParser.parseSentence(r_data.getTitle()));
+        reward_description.setText(StringParser.parseSentence(r_data.getDescription()));
+        reward_icon.setImageResource(r_data.getIcon());
+        reward_price.setText(r_data.getPrice());
     }
 }
