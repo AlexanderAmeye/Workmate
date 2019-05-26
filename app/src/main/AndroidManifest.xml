@@ -19,7 +19,11 @@
             android:name=".Activities.RewardsActivity"
             android:parentActivityName=".Activities.MenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.MenuActivity" />
+
+        <activity
+            android:name=".Activities.MenuActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activities.RegisterActivity"
             android:parentActivityName=".Activities.MainActivity"
@@ -28,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
         </activity>
+
         <activity
             android:name=".Activities.LoginActivity"
             android:parentActivityName=".Activities.MainActivity"
@@ -36,18 +41,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
         </activity>
+
         <activity
             android:name=".Activities.SurveyActivity"
-            android:parentActivityName=".Activities.MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
         </activity>
+
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,5 +66,4 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>

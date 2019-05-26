@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import me.example.paul.CardAdapter;
 import me.example.paul.Model.Reward;
 import me.example.paul.R;
+import me.example.paul.Utils.StringParser;
 
 public class Card extends Fragment {
     private CardView cardView;
@@ -54,9 +54,15 @@ public class Card extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Reward r_data = (Reward) getArguments().getSerializable("data");
-        reward_title.setText(Html.fromHtml(r_data.getTitle()));
-        reward_description.setText(Html.fromHtml(r_data.getDescription()));
-        reward_icon.setImageResource(r_data.getIcon());
-        reward_price.setText(Html.fromHtml(r_data.getPrice()));
+
+        String rewardTitle = r_data.getTitle();
+        String rewardDescription = r_data.getDescription();
+        int rewardIcon = r_data.getIcon();
+        String rewardPrice = r_data.getPrice();
+
+        reward_title.setText(StringParser.parseSentence(rewardTitle));
+        reward_description.setText(StringParser.parseSentence(rewardDescription));
+        reward_icon.setImageResource(rewardIcon);
+        reward_price.setText(rewardPrice);
     }
 }
