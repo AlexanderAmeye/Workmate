@@ -9,7 +9,6 @@ import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,6 +40,7 @@ public class RewardsActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     SessionManager sessionManager;
     NfcAdapter nfcAdapter;
+    private String userEmail;
 
     private boolean nfcConnected = false;
     private ImageView cardActive, cardInactive;
@@ -52,7 +52,7 @@ public class RewardsActivity extends AppCompatActivity {
 
     CardFragmentPagerAdapter pagerAdapter;
     private TextView balance;
-    String balanceString;
+    String userBalanceString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class RewardsActivity extends AppCompatActivity {
 
         //System
         requestQueue = Volley.newRequestQueue(this);
+        userEmail = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
         sessionManager = new SessionManager(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (!nfcAvailable())
@@ -121,12 +122,11 @@ public class RewardsActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (nfcConnected) {
                 int price = Integer.parseInt(pagerAdapter.getPrice(currentPage));
-                int userBalance = Integer.parseInt(balanceString);
+                int userBalance = Integer.parseInt(userBalanceString);
                 if (userBalance >= price) {
                     int newBalance = userBalance - price;
                     balance.setText(Integer.toString(newBalance));
-                    balanceString = Integer.toString(newBalance);
-
+                    userBalanceString = Integer.toString(newBalance);
                     setUserBalance(newBalance);
                     Toast.makeText(RewardsActivity.this, "Reward Purchased!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -157,29 +157,23 @@ public class RewardsActivity extends AppCompatActivity {
     };
 
     private void setUserBalance(int balance) {
-        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/UpdateBalance/" + balance + "/" + email, null, response -> {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, "https://studev.groept.be/api/a18_sd308/UpdateBalance/" + balance + "/" + userEmail, null, response -> {
         }, error -> {
-
         });
         requestQueue.add(request);
     }
 
     private void getUserBalance() {
-        String email = this.getSharedPreferences("LOGIN_SESSION", 0).getString("EMAIL", "");
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetBalance/" + email, null, response -> {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://studev.groept.be/api/a18_sd308/GetBalance/" + userEmail, null, response -> {
             try {
                 JSONObject obj = response.getJSONObject(0);
                 String total_balance = obj.getString("balance");
                 balance.setText(total_balance);
-                balanceString = total_balance;
-
+                userBalanceString = total_balance;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }, error -> {
-
         });
         requestQueue.add(request);
     }
@@ -188,16 +182,6 @@ public class RewardsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_favorite) {
-            Toast.makeText(RewardsActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
